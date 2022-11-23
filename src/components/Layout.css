@@ -1,0 +1,29 @@
+.logo {
+  width: 30px;
+  object-fit: cover;
+  height: 30px;
+  cursor: pointer;
+}
+.avatarLogin {
+  --bs-bg-opacity: 0.1;
+}
+.border-dotted {
+  border-right: dotted 1px gainsboro;
+}
+
+.leftMenu {
+  overflow-y: auto;
+}
+.stickyTop {
+  height: 100px;
+  background-color: rgba(253, 252, 252, 0.068);
+  backdrop-filter: blur(10px);
+  z-index: 999;
+}
+.content {
+  padding-bottom: 2000px;
+}
+
+.search:hover {
+  color: #b0a0fc;
+}
