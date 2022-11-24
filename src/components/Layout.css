@@ -1,3 +1,6 @@
+.cursorHover {
+  cursor: pointer;
+}
 .logo {
   width: 30px;
   object-fit: cover;

@@ -5,19 +5,22 @@ import Products from "./Content/Products";
 import Users from "./Content/Users";
 import Layout from "./Layout";
 import Login from "./Login";
-
+import { Provider } from "react-redux";
+import store from "./redux/store";
 const Router = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />}></Route>
-        <Route path="main" element={<Layout />}>
-          <Route path="dashboard" element={<Dashboard />}></Route>
-          <Route path="users" element={<Users />}></Route>
-          <Route path="products" element={<Products />}></Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />}></Route>
+          <Route path="home" element={<Layout />}>
+            <Route path="dashboard" element={<Dashboard />}></Route>
+            <Route path="users" element={<Users />}></Route>
+            <Route path="products" element={<Products />}></Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   );
 };
 
