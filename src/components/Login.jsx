@@ -60,75 +60,79 @@ const Login = () => {
   };
   if (checkLoginedUser.length <= 0) {
     return (
-      <div className="container-fluid row">
-        <div className="col-3 leftShadow py-5">
-          <h1>Hi, Welcome Back</h1>
-          <img
-            src="https://minimal-kit-react.vercel.app/assets/illustrations/illustration_login.png"
-            alt=""
-            className="w-100"
-          />
+      <div className="container-fluid row login">
+        <div className="col-3 leftShadow ">
+          <div className="loginLeft">
+            <h1>Hi, Welcome Back</h1>
+            <img
+              src="https://minimal-kit-react.vercel.app/assets/illustrations/illustration_login.png"
+              alt=""
+              className="w-100"
+            />
+          </div>
         </div>
         <div className="col-9">
-          <ThemeProvider theme={theme}>
-            <Container component="main" maxWidth="xs">
-              <CssBaseline />
-              <Box
-                sx={{
-                  marginTop: 8,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}>
-                <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-                  <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                  Sign in
-                </Typography>
+          <div className="loginRight">
+            <ThemeProvider theme={theme}>
+              <Container component="main" maxWidth="xs">
+                <CssBaseline />
                 <Box
-                  component="form"
-                  onSubmit={handleSubmit}
-                  noValidate
-                  sx={{ mt: 1 }}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="username"
-                    label="Username"
-                    name="username"
-                    type="text"
-                    autoFocus
-                  />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                  />
-                  <p
-                    id="showErrorLogin"
-                    className="text-danger fw-bold m-0"></p>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}>
-                    Sign In
-                  </Button>
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}>
+                  <Avatar sx={{ m: 1, bgcolor: "#ffa733" }}>
+                    <LockOutlinedIcon />
+                  </Avatar>
+                  <Typography component="h1" variant="h5">
+                    Sign in
+                  </Typography>
+                  <Box
+                    component="form"
+                    onSubmit={handleSubmit}
+                    noValidate
+                    sx={{ mt: 1 }}>
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="username"
+                      label="Username"
+                      name="username"
+                      type="text"
+                      autoFocus
+                    />
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      name="password"
+                      label="Password"
+                      type="password"
+                      id="password"
+                    />
+                    <p
+                      id="showErrorLogin"
+                      className="text-danger fw-bold m-0"></p>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      sx={{ mt: 3, mb: 2, bgcolor: "#ffa733" }}>
+                      Sign In
+                    </Button>
+                  </Box>
                 </Box>
-              </Box>
-            </Container>
-          </ThemeProvider>
+              </Container>
+            </ThemeProvider>
+          </div>
         </div>
       </div>
     );
   } else {
     navigate("/home/dashboard");
+    return <div></div>;
   }
 };
 

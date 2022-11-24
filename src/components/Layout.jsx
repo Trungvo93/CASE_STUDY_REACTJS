@@ -5,15 +5,19 @@ import TopInfo from "./leftBar/TopInfo";
 import { Outlet } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getAction, fecthLoginedUser } from "./redux/actions";
+import { getAction, logOut } from "./redux/actions";
 
 import axios from "axios";
 const Layout = () => {
   const [checkLoginedUser, setCheckLoginedUser] = useState([]);
+  const [loading, setLoading] = useState(false);
   const loginedUser = useSelector((state) => state.loginedUser);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const handleLogout = () => {
+    dispatch(logOut());
+    navigate("/");
+  };
   const goToLogin = () => {
     navigate("/");
   };
@@ -23,11 +27,12 @@ const Layout = () => {
       .then((res) => {
         setCheckLoginedUser([...res.data]);
         dispatch(getAction("FECTH_LOGIN_SUCCESS", res.data));
+        setTimeout(() => {
+          setLoading(true);
+        }, 1200);
       })
       .catch((err) => console.log(err));
   }, []);
-  console.log(checkLoginedUser);
-  console.log(loginedUser);
   if (checkLoginedUser.length > 0 || loginedUser.length > 0) {
     return (
       <div className="container-fluid">
@@ -51,12 +56,22 @@ const Layout = () => {
                   placeholder="Search..."
                 />
               </div>
-              <div>
-                <img
-                  src={`${process.env.PUBLIC_URL}/images/ava-1.jpg`}
-                  alt=""
-                  className="logo rounded-circle"
-                />
+              <div className="logo">
+                <div className="logoRound">
+                  <img
+                    // src={`${process.env.PUBLIC_URL}/images/ava-1.jpg`}
+                    src={loginedUser.length > 0 ? loginedUser[0].avatar : ""}
+                    alt=""
+                    className="logoAva rounded-circle"
+                  />
+                </div>
+
+                <div
+                  className="gap-2 fw-bold logoPopup align-items-center rounded-3 "
+                  onClick={handleLogout}>
+                  <i className="bi bi-box-arrow-left"></i>
+                  <p className="m-0">Logout</p>
+                </div>
               </div>
             </div>
             <div className="content">
@@ -66,7 +81,7 @@ const Layout = () => {
         </div>
       </div>
     );
-  } else {
+  } else if (loading) {
     return (
       <div className="container mt-5 text-center">
         <h3
@@ -77,6 +92,12 @@ const Layout = () => {
         <button className="btn btn-primary" onClick={goToLogin}>
           Go to login
         </button>
+      </div>
+    );
+  } else {
+    return (
+      <div className="container loaderPage">
+        <div className="loader"></div>
       </div>
     );
   }

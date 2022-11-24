@@ -16,3 +16,12 @@ export const fecthLoginedUser = (data) => {
     dispatch(getAction("FECTH_LOGIN_SUCCESS", data));
   };
 };
+
+export const logOut = () => {
+  return async (dispatch) => {
+    const res = await axios.delete(
+      `https://637edb84cfdbfd9a63b87c1c.mockapi.io/loginedUser/1`
+    );
+    dispatch(getAction("FECTH_LOGIN_SUCCESS", []));
+  };
+};
