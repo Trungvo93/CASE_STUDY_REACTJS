@@ -16,7 +16,8 @@ import { useNavigate } from "react-router-dom";
 import { getAction, fecthLoginedUser } from "./redux/actions";
 const theme = createTheme();
 const Login = () => {
-  const users = useSelector((state) => state.users);
+  // const users = useSelector((state) => state.users);
+  const [users, setUsers] = useState([]);
   const [checkLoginedUser, setCheckLoginedUser] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,7 +25,8 @@ const Login = () => {
     axios
       .get("https://637edb84cfdbfd9a63b87c1c.mockapi.io/users")
       .then((res) => {
-        dispatch(getAction("FECTH_USER_SUCCESS", res.data));
+        // dispatch(getAction("FECTH_USER_SUCCESS", res.data));
+        setUsers([...res.data]);
       })
       .catch((err) => console.log(err));
     axios

@@ -1,0 +1,19 @@
+.pagination-item {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  cursor: pointer;
+}
+.pagination-item:hover {
+  background-color: rgba(145, 158, 171, 0.16);
+  color: blue;
+}
+
+.active {
+  background-color: #e66060;
+  color: white;
+}
+.active:hover {
+  background-color: #e66060;
+  color: white;
+}

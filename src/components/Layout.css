@@ -23,12 +23,15 @@
 }
 .logoPopup {
   display: none;
-  background-color: rgba(145, 158, 171, 0.16);
+  background-color: rgba(145, 158, 171);
   padding: 10px;
   position: absolute;
   right: 50%;
   transform: translateX(50%);
   cursor: pointer;
+}
+.logoLibrary {
+  height: 50px;
 }
 
 .avatarLogin {

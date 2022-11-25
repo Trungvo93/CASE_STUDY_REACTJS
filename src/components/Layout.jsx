@@ -32,6 +32,13 @@ const Layout = () => {
         }, 1200);
       })
       .catch((err) => console.log(err));
+
+    axios
+      .get("https://637edb84cfdbfd9a63b87c1c.mockapi.io/users")
+      .then((res) => {
+        dispatch(getAction("FECTH_USER_SUCCESS", res.data));
+      })
+      .catch((err) => console.log(err));
   }, []);
   if (checkLoginedUser.length > 0 || loginedUser.length > 0) {
     return (
@@ -42,18 +49,13 @@ const Layout = () => {
             <hr />
             <Menu></Menu>
           </div>
-          <div className="col-10">
-            <div className="sticky-top stickyTop d-flex justify-content-between align-items-center px-5 py-4">
-              <div className="d-flex align-items-center gap-3">
-                <label htmlFor="search">
-                  <i className="bi bi-search  search"></i>
-                </label>
-                <input
-                  type="text"
-                  name="search"
-                  id="search"
-                  className="form-control"
-                  placeholder="Search..."
+          <div className="col-10 p-0">
+            <div className="sticky-top stickyTop d-flex justify-content-between align-items-center px-5  shadow-sm">
+              <div>
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/logo_library.png`}
+                  alt=""
+                  className="logoLibrary"
                 />
               </div>
               <div className="logo">
@@ -74,7 +76,7 @@ const Layout = () => {
                 </div>
               </div>
             </div>
-            <div className="content">
+            <div className="content px-5 pt-4">
               <Outlet></Outlet>
             </div>
           </div>
