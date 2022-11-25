@@ -5,34 +5,19 @@ import TopInfo from "./leftBar/TopInfo";
 import { Outlet } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getAction, logOut } from "./redux/actions";
+import { getAction } from "./redux/actions";
 
 import axios from "axios";
 const Layout = () => {
-  const [checkLoginedUser, setCheckLoginedUser] = useState([]);
   const [loading, setLoading] = useState(false);
   const loginedUser = useSelector((state) => state.loginedUser);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleLogout = () => {
-    dispatch(logOut());
-    navigate("/");
-  };
-  const goToLogin = () => {
+    dispatch(getAction("FECTH_LOGIN_SUCCESS", []));
     navigate("/");
   };
   useEffect(() => {
-    axios
-      .get(`https://637edb84cfdbfd9a63b87c1c.mockapi.io/loginedUser`)
-      .then((res) => {
-        setCheckLoginedUser([...res.data]);
-        dispatch(getAction("FECTH_LOGIN_SUCCESS", res.data));
-        setTimeout(() => {
-          setLoading(true);
-        }, 1200);
-      })
-      .catch((err) => console.log(err));
-
     axios
       .get("https://637edb84cfdbfd9a63b87c1c.mockapi.io/users")
       .then((res) => {
@@ -40,7 +25,7 @@ const Layout = () => {
       })
       .catch((err) => console.log(err));
   }, []);
-  if (checkLoginedUser.length > 0 || loginedUser.length > 0) {
+  if (loginedUser.length > 0) {
     return (
       <div className="container-fluid">
         <div className="row">
@@ -76,27 +61,14 @@ const Layout = () => {
                 </div>
               </div>
             </div>
-            <div className="content px-5 pt-4">
+            <div className="container mt-5">
               <Outlet></Outlet>
             </div>
           </div>
         </div>
       </div>
     );
-  } else if (loading) {
-    return (
-      <div className="container mt-5 text-center">
-        <h3
-          className="my-5 fw-bold text-primary cursorHover"
-          onClick={goToLogin}>
-          Please Login First!
-        </h3>
-        <button className="btn btn-primary" onClick={goToLogin}>
-          Go to login
-        </button>
-      </div>
-    );
-  } else {
+  } else if (!loading) {
     return (
       <div className="container loaderPage">
         <div className="loader"></div>

@@ -1,4 +1,4 @@
-const initialState = { users: [], loginedUser: [] };
+const initialState = { users: [], loginedUser: [], avatars: [] };
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -12,6 +12,8 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         loginedUser: [...action.payload],
       };
+    case "FECTH_AVATAR_SUCCESS":
+      return { ...state, avatars: [...action.payload] };
     default:
       return state;
   }

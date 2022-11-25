@@ -17,3 +17,9 @@
   background-color: #e66060;
   color: white;
 }
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+}

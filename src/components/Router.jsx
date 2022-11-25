@@ -7,6 +7,7 @@ import Layout from "./Layout";
 import Login from "./Login";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import AddUser from "./Content/AddUser";
 const Router = () => {
   return (
     <Provider store={store}>
@@ -17,6 +18,7 @@ const Router = () => {
             <Route path="dashboard" element={<Dashboard />}></Route>
             <Route path="users" element={<Users />}></Route>
             <Route path="products" element={<Products />}></Route>
+            <Route path="adduser" element={<AddUser />}></Route>
           </Route>
         </Routes>
       </BrowserRouter>
