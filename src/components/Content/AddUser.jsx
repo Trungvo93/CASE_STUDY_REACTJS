@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 const AddUser = () => {
   const avatars = useSelector((state) => state.avatars);
+  console.log(avatars);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -105,7 +106,7 @@ const AddUser = () => {
       });
   };
   return (
-    <div>
+    <div className="container">
       <h1 className="mb-4">Add User</h1>
 
       <Formik
@@ -193,8 +194,8 @@ const AddUser = () => {
           <div role="group" aria-labelledby="my-radio-group">
             <h5 className="mt-3">Choose Avatar</h5>
             {avatars.length > 0
-              ? avatars.map((e) => (
-                  <label className="pe-4">
+              ? avatars.map((e, index) => (
+                  <label className="pe-4" key={index}>
                     <Field
                       name="avatar"
                       value={e.avatar}

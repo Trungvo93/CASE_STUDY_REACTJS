@@ -24,6 +24,13 @@ const Layout = () => {
         dispatch(getAction("FECTH_USER_SUCCESS", res.data));
       })
       .catch((err) => console.log(err));
+
+    axios
+      .get(`https://637edb84cfdbfd9a63b87c1c.mockapi.io/avatars`)
+      .then((res) => {
+        dispatch(getAction("FECTH_AVATAR_SUCCESS", res.data));
+      })
+      .catch((err) => console.log(err));
   }, []);
   if (loginedUser.length > 0) {
     return (

@@ -5,12 +5,13 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { getAction } from "../redux/actions";
 import { useNavigate } from "react-router-dom";
+import Toast from "react-bootstrap/Toast";
 const Users = () => {
+  const [show, setShow] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users);
   const loginedUser = useSelector((state) => state.loginedUser);
-  console.log(loginedUser[0].role);
   const [listUsers, setListUsers] = useState([...users]);
 
   const [idActive, setIdActive] = useState(1);
@@ -37,32 +38,56 @@ const Users = () => {
   };
   //Delete user and update state
   const handleDelete = (user) => {
-    axios
-      .delete(`https://637edb84cfdbfd9a63b87c1c.mockapi.io/users/${user.id}`)
-      .then((res) => {
-        const newList = users.filter((e) => e.id !== res.data.id);
-        dispatch(getAction("FECTH_USER_SUCCESS", newList));
-        setListUsers([...newList]);
-        const firstIndex = idActive * 10 - 10;
-        const lastIndex = idActive * 10;
-        const listPerPage = newList.slice(firstIndex, lastIndex);
-        if (listPerPage.length > 0) {
-          setUsersPerPage(listPerPage);
-        } else {
-          const newIdActive = idActive - 1;
-          setIdActive(newIdActive);
-          const newFirstIndex = newIdActive * 10 - 10;
-          const newLastIndex = newIdActive * 10;
-          const newListPerPage = newList.slice(newFirstIndex, newLastIndex);
-          setUsersPerPage(newListPerPage);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const confirmation = window.confirm(
+      "Are you sure you want to delete this user"
+    );
+    if (confirmation) {
+      axios
+        .delete(`https://637edb84cfdbfd9a63b87c1c.mockapi.io/users/${user.id}`)
+        .then((res) => {
+          const newList = users.filter((e) => e.id !== res.data.id);
+          dispatch(getAction("FECTH_USER_SUCCESS", newList));
+          setListUsers([...newList]);
+          const firstIndex = idActive * 10 - 10;
+          const lastIndex = idActive * 10;
+          const listPerPage = newList.slice(firstIndex, lastIndex);
+          if (listPerPage.length > 0) {
+            setUsersPerPage(listPerPage);
+          } else {
+            const newIdActive = idActive - 1;
+            setIdActive(newIdActive);
+            const newFirstIndex = newIdActive * 10 - 10;
+            const newLastIndex = newIdActive * 10;
+            const newListPerPage = newList.slice(newFirstIndex, newLastIndex);
+            setUsersPerPage(newListPerPage);
+          }
+        })
+        .then((res2) => {
+          setShow(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
+
+  //Trigger Toast popup
+
   return (
     <div>
+      {/* Show popup delete */}
+      <Toast
+        onClose={() => setShow(false)}
+        show={show}
+        delay={3000}
+        autohide
+        className="toast-popup bg-success text-white">
+        <Toast.Header className="bg-success text-white">
+          <i class="bi bi-check-circle-fill fw-bold"></i>
+          <strong className="ms-3 me-auto fw-bold">Success</strong>
+        </Toast.Header>
+        <Toast.Body>User has been delete!</Toast.Body>
+      </Toast>
       <div className="d-flex justify-content-between my-4">
         <h3>User</h3>
         {loginedUser[0].role === "admin" ? (
@@ -103,6 +128,7 @@ const Users = () => {
                   <td>
                     {loginedUser[0].role === "admin" ? (
                       <button
+                        id="liveToastBtn"
                         className="btn btn-danger "
                         onClick={() => {
                           handleDelete(e);
@@ -159,21 +185,34 @@ const Users = () => {
                 </tr>
               ))}
 
+          {/* Pagination - phân trang */}
           <tr>
             <td colSpan={4} className="py-3">
               <div className="pagination d-flex justify-content-end">
-                {pageNumbers.map((i) => (
-                  <div
-                    key={i}
-                    className={`pagination-item border ${
-                      idActive === i ? "active" : ""
-                    }`}
-                    onClick={() => {
-                      handleJumpPage(i);
-                    }}>
-                    {i}
-                  </div>
-                ))}
+                <ul className="pagination">
+                  {pageNumbers.map((i) => (
+                    // <div
+                    //   key={i}
+                    //   className={`pagination-item border ${
+                    //     idActive === i ? "active" : ""
+                    //   }`}
+                    //   onClick={() => {
+                    //     handleJumpPage(i);
+                    //   }}>
+                    //   {i}
+                    // </div>
+                    <li
+                      className={`page-item page-link ${
+                        idActive === i ? "active" : ""
+                      }`}
+                      key={i}
+                      onClick={() => {
+                        handleJumpPage(i);
+                      }}>
+                      {i}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </td>
           </tr>
