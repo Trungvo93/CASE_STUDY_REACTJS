@@ -4,4 +4,5 @@
 }
 .role {
   width: max-content;
+  cursor: pointer;
 }

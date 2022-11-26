@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { getAction } from "../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import "./AddUser.css";
@@ -8,20 +9,20 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import Toast from "react-bootstrap/Toast";
 
-const AddUser = () => {
+const UserDetail = () => {
+  const { state } = useLocation();
   const [show, setShow] = useState(false);
   const avatars = useSelector((state) => state.avatars);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    name: "",
-    avatar:
-      "https://minimal-kit-react.vercel.app/assets/images/avatars/avatar_1.jpg",
-    role: "admin",
-    username: "",
-    password: "",
-    studentCode: "",
-    schoolCode: "",
+    name: state.name,
+    avatar: state.avatar,
+    role: state.role,
+    username: state.username,
+    password: state.password,
+    studentCode: state.studentCode,
+    schoolCode: state.schoolCode,
   });
   const [checkCode, setCheckCode] = useState("");
   const [rePassword, setRePassword] = useState({
@@ -65,7 +66,7 @@ const AddUser = () => {
     if (e.target.name === "password") {
       if (
         rePassword.repassword !== e.target.value &&
-        rePassword.repassword === ""
+        rePassword.repassword !== ""
       ) {
         setRePassword({
           ...rePassword,
@@ -84,7 +85,6 @@ const AddUser = () => {
   const checkRePassword = (e) => {
     rePassword.repassword = e.target.value;
     setRePassword({ ...rePassword });
-    console.log(rePassword.repassword);
     if (form.password !== "") {
       if (form.password !== e.target.value) {
         setRePassword({
@@ -102,47 +102,40 @@ const AddUser = () => {
     }
   };
   const handleSubmit = (e) => {
+    const confirmation = window.confirm("Are you sure you want to save");
     if (rePassword.repassword === form.password) {
       if (
         form.role !== "student" ||
         (form.role === "student" &&
           form.studentCode !== "" &&
-          form.schoolCode !== "")
+          form.schoolCode !== "" &&
+          form.studentCode !== undefined &&
+          form.schoolCode !== undefined)
       ) {
-        axios
-          .get(`https://637edb84cfdbfd9a63b87c1c.mockapi.io/users`)
-          .then((res) => {
-            const found = res.data.findIndex(
-              (e) => e.username === form.username
-            );
-            if (found === -1) {
-              setShow(true);
-              setTimeout(() => {
-                axios
-                  .post(
-                    `https://637edb84cfdbfd9a63b87c1c.mockapi.io/users`,
-                    form
-                  )
-                  .then((res1) => {
-                    axios
-                      .get(`https://637edb84cfdbfd9a63b87c1c.mockapi.io/users`)
-                      .then((res2) => {
-                        dispatch(getAction("FECTH_USER_SUCCESS", res2.data));
-                      })
-                      .then((res3) => {
-                        navigate("/home/users");
-                      })
-                      .catch((err3) => console.log(err3));
-                  })
-                  .catch((err1) => console.log(err1));
-              }, 2000);
-            } else {
-              setRePassword({
-                ...rePassword,
-                errorPassword: "Username has already existed",
-              });
-            }
-          });
+        if (confirmation) {
+          if (form.role !== "student") {
+            form.studentCode = "";
+            form.schoolCode = "";
+            setForm({ ...form });
+          }
+          rePassword.repassword = "";
+          setRePassword({ ...rePassword, errorPassword: "" });
+          setShow(true);
+          axios
+            .put(
+              `https://637edb84cfdbfd9a63b87c1c.mockapi.io/users/${state.id}`,
+              form
+            )
+            .then((res1) => {
+              axios
+                .get(`https://637edb84cfdbfd9a63b87c1c.mockapi.io/users`)
+                .then((res2) => {
+                  dispatch(getAction("FECTH_USER_SUCCESS", res2.data));
+                })
+                .catch((err3) => console.log(err3));
+            })
+            .catch((err1) => console.log(err1));
+        }
       } else {
         setCheckCode("You must enterCode");
       }
@@ -156,7 +149,7 @@ const AddUser = () => {
   };
   return (
     <div className="container">
-      {/* Show popup add success */}
+      {/* Show popup save success */}
       <Toast
         onClose={() => setShow(false)}
         show={show}
@@ -167,9 +160,10 @@ const AddUser = () => {
           <i class="bi bi-check-circle-fill fw-bold"></i>
           <strong className="ms-3 me-auto fw-bold">Success</strong>
         </Toast.Header>
-        <Toast.Body>User has been create success!</Toast.Body>
+        <Toast.Body>User has been save success!</Toast.Body>
       </Toast>
-      <h3 className="mb-4">Add User</h3>
+
+      <h3>Profile</h3>
 
       {/* Create user */}
       <Formik
@@ -178,7 +172,11 @@ const AddUser = () => {
         validationSchema={formSchema}
         onSubmit={handleSubmit}>
         <Form className="">
+          <label htmlFor="name" className="fw-bold text-info mb-2 mt-3">
+            Your name
+          </label>
           <Field
+            id="name"
             name="name"
             value={form.name}
             onChange={(e) => handleChange(e)}
@@ -190,19 +188,27 @@ const AddUser = () => {
             name="name"
             className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
           <br />
+          <label htmlFor="username" className="fw-bold text-info mb-2">
+            Username
+          </label>
           <Field
+            id="username"
             className="form-control"
             placeholder="Username"
             name="username"
             value={form.username}
+            disabled
             onChange={(e) => handleChange(e)}></Field>
           <ErrorMessage
             component="div"
             name="username"
             className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
           <br />
-
+          <label htmlFor="password" className="fw-bold text-info mb-2">
+            Password
+          </label>
           <Field
+            id="password"
             className="form-control"
             placeholder="Password"
             name="password"
@@ -214,11 +220,16 @@ const AddUser = () => {
             name="password"
             className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
           <br />
+          <label htmlFor="repassword" className="fw-bold text-info mb-2">
+            Re-password
+          </label>
           <Field
+            id="repassword"
             className="form-control"
             placeholder="Re-password"
             name="repassword"
             type="password"
+            value={rePassword.repassword}
             onChange={(e) => checkRePassword(e)}></Field>
           <div className="text-capitalize fw-bold text-danger mt-3">
             {rePassword.errorPassword}
@@ -306,7 +317,7 @@ const AddUser = () => {
           </div>
           <br />
           <button type="submit" className="btn btn-success px-5 me-5">
-            Create
+            Save
           </button>
 
           <button
@@ -322,4 +333,4 @@ const AddUser = () => {
   );
 };
 
-export default AddUser;
+export default UserDetail;

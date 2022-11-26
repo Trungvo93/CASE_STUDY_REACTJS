@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { getAction } from "../redux/actions";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Toast from "react-bootstrap/Toast";
 const Users = () => {
   const [show, setShow] = useState(false);
@@ -13,7 +13,6 @@ const Users = () => {
   const users = useSelector((state) => state.users);
   const loginedUser = useSelector((state) => state.loginedUser);
   const [listUsers, setListUsers] = useState([...users]);
-
   const [idActive, setIdActive] = useState(1);
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(listUsers.length / 10); i++) {
@@ -35,6 +34,12 @@ const Users = () => {
   //Add user
   const handleAddUser = () => {
     navigate("/home/adduser");
+  };
+
+  const { state } = useLocation();
+  //Edit user
+  const handleEditUser = (e) => {
+    navigate("/home/userdetail", { state: e });
   };
   //Delete user and update state
   const handleDelete = (user) => {
@@ -88,6 +93,8 @@ const Users = () => {
         </Toast.Header>
         <Toast.Body>User has been delete!</Toast.Body>
       </Toast>
+
+      {/* Add user */}
       <div className="d-flex justify-content-between my-4">
         <h3>User</h3>
         {loginedUser[0].role === "admin" ? (
@@ -100,6 +107,8 @@ const Users = () => {
           ""
         )}
       </div>
+
+      {/* Show users */}
       <table className="table table-hover">
         <thead>
           <tr>
@@ -127,14 +136,21 @@ const Users = () => {
                   <td className="text-capitalize">{e.role}</td>
                   <td>
                     {loginedUser[0].role === "admin" ? (
-                      <button
-                        id="liveToastBtn"
-                        className="btn btn-danger "
-                        onClick={() => {
-                          handleDelete(e);
-                        }}>
-                        Delete
-                      </button>
+                      <>
+                        <button
+                          className="btn btn-warning me-3"
+                          onClick={() => handleEditUser(e)}>
+                          Edit
+                        </button>
+                        <button
+                          id="liveToastBtn"
+                          className="btn btn-danger "
+                          onClick={() => {
+                            handleDelete(e);
+                          }}>
+                          Delete
+                        </button>
+                      </>
                     ) : (
                       <button
                         className="btn btn-danger "
@@ -164,13 +180,20 @@ const Users = () => {
                   <td className="text-capitalize">{e.role}</td>
                   <td>
                     {loginedUser[0].role === "admin" ? (
-                      <button
-                        className="btn btn-danger "
-                        onClick={() => {
-                          handleDelete(e);
-                        }}>
-                        Delete
-                      </button>
+                      <>
+                        <button
+                          className="btn btn-warning me-3"
+                          onClick={() => handleEditUser(e)}>
+                          Edit
+                        </button>{" "}
+                        <button
+                          className="btn btn-danger "
+                          onClick={() => {
+                            handleDelete(e);
+                          }}>
+                          Delete
+                        </button>
+                      </>
                     ) : (
                       <button
                         className="btn btn-danger "
@@ -191,16 +214,6 @@ const Users = () => {
               <div className="pagination d-flex justify-content-end">
                 <ul className="pagination">
                   {pageNumbers.map((i) => (
-                    // <div
-                    //   key={i}
-                    //   className={`pagination-item border ${
-                    //     idActive === i ? "active" : ""
-                    //   }`}
-                    //   onClick={() => {
-                    //     handleJumpPage(i);
-                    //   }}>
-                    //   {i}
-                    // </div>
                     <li
                       className={`page-item page-link ${
                         idActive === i ? "active" : ""
