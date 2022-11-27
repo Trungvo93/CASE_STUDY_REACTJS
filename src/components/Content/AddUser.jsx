@@ -84,7 +84,6 @@ const AddUser = () => {
   const checkRePassword = (e) => {
     rePassword.repassword = e.target.value;
     setRePassword({ ...rePassword });
-    console.log(rePassword.repassword);
     if (form.password !== "") {
       if (form.password !== e.target.value) {
         setRePassword({
@@ -135,7 +134,7 @@ const AddUser = () => {
                       .catch((err3) => console.log(err3));
                   })
                   .catch((err1) => console.log(err1));
-              }, 2000);
+              }, 1000);
             } else {
               setRePassword({
                 ...rePassword,
@@ -164,7 +163,7 @@ const AddUser = () => {
         autohide
         className="toast-popup bg-success text-white">
         <Toast.Header className="bg-success text-white">
-          <i class="bi bi-check-circle-fill fw-bold"></i>
+          <i className="bi bi-check-circle-fill fw-bold"></i>
           <strong className="ms-3 me-auto fw-bold">Success</strong>
         </Toast.Header>
         <Toast.Body>User has been create success!</Toast.Body>
@@ -183,8 +182,7 @@ const AddUser = () => {
             value={form.name}
             onChange={(e) => handleChange(e)}
             className="form-control"
-            placeholder="Your name"
-            autoFocus></Field>
+            placeholder="Your name"></Field>
           <ErrorMessage
             component="div"
             name="name"

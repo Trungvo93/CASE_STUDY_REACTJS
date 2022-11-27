@@ -120,7 +120,6 @@ const UserDetail = () => {
           }
           rePassword.repassword = "";
           setRePassword({ ...rePassword, errorPassword: "" });
-          setShow(true);
           axios
             .put(
               `https://637edb84cfdbfd9a63b87c1c.mockapi.io/users/${state.id}`,
@@ -131,6 +130,7 @@ const UserDetail = () => {
                 .get(`https://637edb84cfdbfd9a63b87c1c.mockapi.io/users`)
                 .then((res2) => {
                   dispatch(getAction("FECTH_USER_SUCCESS", res2.data));
+                  setShow(true);
                 })
                 .catch((err3) => console.log(err3));
             })

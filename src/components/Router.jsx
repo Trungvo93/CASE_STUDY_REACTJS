@@ -9,6 +9,8 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import AddUser from "./Content/AddUser";
 import UserDetail from "./Content/UserDetail";
+import AddProduct from "./Content/AddProduct";
+import ProductDetail from "./Content/ProductDetail";
 const Router = () => {
   return (
     <Provider store={store}>
@@ -21,6 +23,8 @@ const Router = () => {
             <Route path="userdetail" element={<UserDetail />}></Route>
             <Route path="products" element={<Products />}></Route>
             <Route path="adduser" element={<AddUser />}></Route>
+            <Route path="addproduct" element={<AddProduct />}></Route>
+            <Route path="productdetail" element={<ProductDetail />}></Route>
           </Route>
         </Routes>
       </BrowserRouter>
