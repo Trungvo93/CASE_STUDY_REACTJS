@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Products.css";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -12,20 +12,29 @@ const Products = () => {
   const dispatch = useDispatch();
   const books = useSelector((state) => state.books);
   const loginedUser = useSelector((state) => state.loginedUser);
-  const [listUsers, setListUsers] = useState([...books]);
+  const [listBooks, setListUsers] = useState([...books]);
   const [findItem, setFindItem] = useState("");
   const [idActive, setIdActive] = useState(1);
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(listUsers.length / 10); i++) {
-    pageNumbers.push(i);
-  }
-  const [usersPerPage, setUsersPerPage] = useState([...listUsers.slice(0, 10)]);
+  const [pageNumbers, setPageNumbers] = useState([]);
+  const getPageNumbers = (list) => {
+    const pages = [];
+    for (let i = 1; i <= Math.ceil(list.length / 10); i++) {
+      pages.push(i);
+    }
+    setPageNumbers([...pages]);
+  };
+
+  useEffect(() => {
+    getPageNumbers(listBooks);
+  }, []);
+
+  const [usersPerPage, setUsersPerPage] = useState([...listBooks.slice(0, 10)]);
 
   //Jump pageNumbers
   const handleJumpPage = (index) => {
     const firstIndex = index * 10 - 10;
     const lastIndex = index * 10;
-    const newList = listUsers.slice(firstIndex, lastIndex);
+    const newList = listBooks.slice(firstIndex, lastIndex);
     setUsersPerPage(newList);
     setIdActive(index);
   };
@@ -37,20 +46,12 @@ const Products = () => {
     const listFilter = books.filter((item) =>
       item.title.trim().toLowerCase().includes(convertValue)
     );
+    console.log(listFilter);
     setListUsers([...listFilter]);
-    const firstIndex = idActive * 10 - 10;
-    const lastIndex = idActive * 10;
-    const listPerPage = listFilter.slice(firstIndex, lastIndex);
-    if (listPerPage.length > 0) {
-      setUsersPerPage(listPerPage);
-    } else {
-      const newIdActive = idActive - 1;
-      setIdActive(newIdActive);
-      const newFirstIndex = newIdActive * 10 - 10;
-      const newLastIndex = newIdActive * 10;
-      const newListPerPage = listFilter.slice(newFirstIndex, newLastIndex);
-      setUsersPerPage(newListPerPage);
-    }
+    getPageNumbers(listFilter);
+    setIdActive(1);
+    const newList = listFilter.slice(0, 10);
+    setUsersPerPage(newList);
   };
 
   //Add user
@@ -74,19 +75,9 @@ const Products = () => {
           const newList = books.filter((e) => e.id !== res.data.id);
           dispatch(getAction("FECTH_BOOKS_SUCCESS", newList));
           setListUsers([...newList]);
-          const firstIndex = idActive * 10 - 10;
-          const lastIndex = idActive * 10;
-          const listPerPage = newList.slice(firstIndex, lastIndex);
-          if (listPerPage.length > 0) {
-            setUsersPerPage(listPerPage);
-          } else {
-            const newIdActive = idActive - 1;
-            setIdActive(newIdActive);
-            const newFirstIndex = newIdActive * 10 - 10;
-            const newLastIndex = newIdActive * 10;
-            const newListPerPage = newList.slice(newFirstIndex, newLastIndex);
-            setUsersPerPage(newListPerPage);
-          }
+          getPageNumbers(newList);
+          setIdActive(1);
+          setUsersPerPage(newList.slice(0, 10));
         })
         .then((res2) => {
           setShow(true);
@@ -144,11 +135,9 @@ const Products = () => {
         <thead>
           <tr>
             <th>#</th>
-            <th>Category</th>
             <th>Title</th>
             <th>ISBN</th>
             <th>Amount</th>
-            <th>Status</th>
             <th>Note</th>
             {loginedUser[0].role === "admin" ? <th>Action</th> : ""}
           </tr>
@@ -157,13 +146,11 @@ const Products = () => {
           {usersPerPage.map((e, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
-              <td className="text-capitalize">{e.category}</td>
               <td>
                 <p className="m-0">{e.title}</p>
               </td>
               <td className="text-capitalize">{e.ISBN}</td>
               <td className="text-capitalize">{e.amount}</td>
-              <td className="text-capitalize">{e.status}</td>
               <td className="text-capitalize">{e.note}</td>
               <td>
                 {loginedUser[0].role === "admin" ? (

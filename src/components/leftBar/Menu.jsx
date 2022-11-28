@@ -36,6 +36,13 @@ const Menu = () => {
           <i className="bi bi-journal-text"></i>
           <p className="m-0">Products</p>
         </NavLink>
+        <NavLink
+          to="borrowreturnbooks"
+          className="d-flex gap-3 align-items-center text-decoration-none p-3 rounded-2"
+          style={({ isActive }) => (isActive ? activeStyle : noneActiveStyle)}>
+          <i className="bi bi-journal-text"></i>
+          <p className="m-0">Borrow/Return Books</p>
+        </NavLink>
       </div>
     </>
   );

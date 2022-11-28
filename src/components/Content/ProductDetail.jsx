@@ -68,26 +68,7 @@ const ProductDetail = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    // const confirmation = window.confirm("Are you sure you want to save");
-    // if (confirmation) {
-    //   axios
-    //     .put(
-    //       `https://637edb84cfdbfd9a63b87c1c.mockapi.io/books/${state.id}`,
-    //       form
-    //     )
-    //     .then((res1) => {
-    //       axios
-    //         .get(`https://637edb84cfdbfd9a63b87c1c.mockapi.io/books`)
-    //         .then((res2) => {
-    //           dispatch(getAction("FECTH_BOOKS_SUCCESS", res2.data));
-    //           setShow(true);
-    //         })
-    //         .catch((err3) => console.log(err3));
-    //     })
-    //     .catch((err1) => console.log(err1));
-    // }
-  };
+  const handleSubmit = (e) => {};
 
   return (
     <div className="container mb-5">

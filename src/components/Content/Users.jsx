@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { getAction } from "../redux/actions";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Toast from "react-bootstrap/Toast";
 const Users = () => {
   const [show, setShow] = useState(false);
@@ -35,7 +35,6 @@ const Users = () => {
 
   //Filter user
   const handleFilter = (e) => {
-    console.log(e.target.value);
     setFindUsers(e.target.value);
     const convertValue = e.target.value.trim().toLowerCase();
     const listFilter = users.filter((user) =>
@@ -165,7 +164,11 @@ const Users = () => {
           <tr>
             <th>#</th>
             <th>Name</th>
+            <th>Birthday</th>
+            <th>Email</th>
             <th>Role</th>
+            <th>School</th>
+            <th>Student ID</th>
             <th>Action</th>
           </tr>
         </thead>
