@@ -8,8 +8,14 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import Toast from "react-bootstrap/Toast";
-
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 const UserDetail = () => {
+  const [confirm, setConfirm] = useState(false);
   const { state } = useLocation();
   const [show, setShow] = useState(false);
   const avatars = useSelector((state) => state.avatars);
@@ -101,6 +107,56 @@ const UserDetail = () => {
       }
     }
   };
+
+  const handleClickOpen = () => {
+    setConfirm(true);
+  };
+  const handleClose = (e) => {
+    setConfirm(false);
+    if (e.target.value === "confirm") {
+      if (rePassword.repassword === form.password) {
+        if (
+          form.role !== "student" ||
+          (form.role === "student" &&
+            form.studentCode !== "" &&
+            form.schoolCode !== "" &&
+            form.studentCode !== undefined &&
+            form.schoolCode !== undefined)
+        ) {
+          if (form.role !== "student") {
+            form.studentCode = "";
+            form.schoolCode = "";
+            setForm({ ...form });
+          }
+          rePassword.repassword = "";
+          setRePassword({ ...rePassword, errorPassword: "" });
+          axios
+            .put(
+              `https://637edb84cfdbfd9a63b87c1c.mockapi.io/users/${state.id}`,
+              form
+            )
+            .then((res1) => {
+              axios
+                .get(`https://637edb84cfdbfd9a63b87c1c.mockapi.io/users`)
+                .then((res2) => {
+                  dispatch(getAction("FECTH_USER_SUCCESS", res2.data));
+                  setShow(true);
+                })
+                .catch((err3) => console.log(err3));
+            })
+            .catch((err1) => console.log(err1));
+        } else {
+          setCheckCode("You must enterCode");
+        }
+      } else {
+        setRePassword({
+          ...rePassword,
+          errorPassword: "Password not correctly",
+          status: false,
+        });
+      }
+    }
+  };
   const handleSubmit = (e) => {
     const confirmation = window.confirm("Are you sure you want to save");
     if (rePassword.repassword === form.password) {
@@ -148,7 +204,7 @@ const UserDetail = () => {
     }
   };
   return (
-    <div className="container">
+    <div className="container mb-5">
       {/* Show popup save success */}
       <Toast
         onClose={() => setShow(false)}
@@ -316,17 +372,45 @@ const UserDetail = () => {
               : ""}
           </div>
           <br />
-          <button type="submit" className="btn btn-success px-5 me-5">
-            Save
-          </button>
 
-          <button
-            className="btn btn-outline-secondary px-4"
+          <Button
+            variant="contained"
+            color="success"
+            startIcon={<CheckIcon />}
+            onClick={handleClickOpen}
+            className="px-4 me-4">
+            Save
+          </Button>
+          <Button
+            variant="outlined"
+            color="secondary"
+            startIcon={<CloseIcon />}
             onClick={() => {
               navigate("/home/users");
-            }}>
+            }}
+            className="px-4 me-5">
             Cancel
-          </button>
+          </Button>
+
+          {/* Show dialog confirm when click button Save */}
+          <Dialog
+            open={confirm}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description">
+            <DialogTitle id="alert-dialog-title">
+              {"Are you sure you want to save?"}
+            </DialogTitle>
+
+            <DialogActions>
+              <Button onClick={handleClose} value="cancel">
+                Disagree
+              </Button>
+              <Button onClick={handleClose} autoFocus value="confirm">
+                Agree
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Form>
       </Formik>
     </div>

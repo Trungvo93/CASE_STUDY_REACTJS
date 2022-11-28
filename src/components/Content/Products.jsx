@@ -19,9 +19,7 @@ const Products = () => {
   for (let i = 1; i <= Math.ceil(listUsers.length / 10); i++) {
     pageNumbers.push(i);
   }
-  // const firstPage = [...listUsers.slice(0, 10)];
-  const [firstPage, setFirstPage] = useState([...listUsers.slice(0, 10)]);
-  const [usersPerPage, setUsersPerPage] = useState([]);
+  const [usersPerPage, setUsersPerPage] = useState([...listUsers.slice(0, 10)]);
 
   //Jump pageNumbers
   const handleJumpPage = (index) => {
@@ -40,7 +38,6 @@ const Products = () => {
       item.title.trim().toLowerCase().includes(convertValue)
     );
     setListUsers([...listFilter]);
-    setFirstPage([...listFilter.slice(0, 10)]);
     const firstIndex = idActive * 10 - 10;
     const lastIndex = idActive * 10;
     const listPerPage = listFilter.slice(firstIndex, lastIndex);
@@ -151,122 +148,48 @@ const Products = () => {
             <th>Title</th>
             <th>ISBN</th>
             <th>Amount</th>
-            <th>Action</th>
+            <th>Status</th>
+            <th>Note</th>
+            {loginedUser[0].role === "admin" ? <th>Action</th> : ""}
           </tr>
         </thead>
         <tbody>
-          {usersPerPage.length <= 0
-            ? firstPage.map((e, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td className="text-capitalize">{e.category}</td>
-                  <td>
-                    <div className="d-flex align-items-center gap-2">
-                      <img
-                        src={e.thumbnail}
-                        alt=""
-                        className="rounded-circle avatar"
-                      />
-                      <p className="m-0">{e.title}</p>
-                    </div>
-                  </td>
-                  <td className="text-capitalize">{e.ISBN}</td>
-                  <td className="text-capitalize">{e.amount}</td>
-                  <td>
-                    {loginedUser[0].role === "admin" ? (
-                      <>
-                        <button
-                          className="btn btn-warning me-3"
-                          onClick={() => handleEditUser(e)}>
-                          Edit
-                        </button>
-                        <button
-                          id="liveToastBtn"
-                          className="btn btn-danger "
-                          onClick={() => {
-                            handleDelete(e);
-                          }}>
-                          Delete
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          className="btn btn-warning me-3"
-                          onClick={() => handleEditUser(e)}
-                          disabled>
-                          Edit
-                        </button>
-                        <button
-                          className="btn btn-danger "
-                          onClick={() => {
-                            handleDelete(e);
-                          }}
-                          disabled>
-                          Delete
-                        </button>
-                      </>
-                    )}
-                  </td>
-                </tr>
-              ))
-            : usersPerPage.map((e, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td className="text-capitalize">{e.category}</td>
-                  <td>
-                    <div className="d-flex align-items-center gap-2">
-                      <img
-                        src={e.thumbnail}
-                        alt=""
-                        className="rounded-circle avatar"
-                      />
-                      <p className="m-0">{e.title}</p>
-                    </div>
-                  </td>
-                  <td className="text-capitalize">{e.amount}</td>
-                  <td className="text-capitalize">{e.ISBN}</td>
-                  <td>
-                    {loginedUser[0].role === "admin" ? (
-                      <>
-                        <button
-                          className="btn btn-warning me-3"
-                          onClick={() => handleEditUser(e)}>
-                          Edit
-                        </button>{" "}
-                        <button
-                          className="btn btn-danger "
-                          onClick={() => {
-                            handleDelete(e);
-                          }}>
-                          Delete
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          className="btn btn-warning me-3"
-                          onClick={() => handleEditUser(e)}
-                          disabled>
-                          Edit
-                        </button>
-                        <button
-                          className="btn btn-danger "
-                          onClick={() => {
-                            handleDelete(e);
-                          }}
-                          disabled>
-                          Delete
-                        </button>
-                      </>
-                    )}
-                  </td>
-                </tr>
-              ))}
-
+          {usersPerPage.map((e, index) => (
+            <tr key={index}>
+              <td>{index + 1}</td>
+              <td className="text-capitalize">{e.category}</td>
+              <td>
+                <p className="m-0">{e.title}</p>
+              </td>
+              <td className="text-capitalize">{e.ISBN}</td>
+              <td className="text-capitalize">{e.amount}</td>
+              <td className="text-capitalize">{e.status}</td>
+              <td className="text-capitalize">{e.note}</td>
+              <td>
+                {loginedUser[0].role === "admin" ? (
+                  <>
+                    <button
+                      className="btn btn-warning me-3"
+                      onClick={() => handleEditUser(e)}>
+                      Edit
+                    </button>{" "}
+                    <button
+                      className="btn btn-danger "
+                      onClick={() => {
+                        handleDelete(e);
+                      }}>
+                      Delete
+                    </button>
+                  </>
+                ) : (
+                  ""
+                )}
+              </td>
+            </tr>
+          ))}
           {/* Pagination - phân trang */}
           <tr>
-            <td colSpan={6} className="py-3">
+            <td colSpan={8} className="py-3">
               <div className="pagination d-flex justify-content-end">
                 <ul className="pagination">
                   {pageNumbers.map((i) => (

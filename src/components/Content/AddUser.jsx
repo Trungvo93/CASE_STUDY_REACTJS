@@ -101,56 +101,61 @@ const AddUser = () => {
     }
   };
   const handleSubmit = (e) => {
-    if (rePassword.repassword === form.password) {
-      if (
-        form.role !== "student" ||
-        (form.role === "student" &&
-          form.studentCode !== "" &&
-          form.schoolCode !== "")
-      ) {
-        axios
-          .get(`https://637edb84cfdbfd9a63b87c1c.mockapi.io/users`)
-          .then((res) => {
-            const found = res.data.findIndex(
-              (e) => e.username === form.username
-            );
-            if (found === -1) {
-              setShow(true);
-              setTimeout(() => {
-                axios
-                  .post(
-                    `https://637edb84cfdbfd9a63b87c1c.mockapi.io/users`,
-                    form
-                  )
-                  .then((res1) => {
-                    axios
-                      .get(`https://637edb84cfdbfd9a63b87c1c.mockapi.io/users`)
-                      .then((res2) => {
-                        dispatch(getAction("FECTH_USER_SUCCESS", res2.data));
-                      })
-                      .then((res3) => {
-                        navigate("/home/users");
-                      })
-                      .catch((err3) => console.log(err3));
-                  })
-                  .catch((err1) => console.log(err1));
-              }, 1000);
-            } else {
-              setRePassword({
-                ...rePassword,
-                errorPassword: "Username has already existed",
-              });
-            }
-          });
+    const confirmation = window.confirm("Are you sure you want to save");
+    if (confirmation) {
+      if (rePassword.repassword === form.password) {
+        if (
+          form.role !== "student" ||
+          (form.role === "student" &&
+            form.studentCode !== "" &&
+            form.schoolCode !== "")
+        ) {
+          axios
+            .get(`https://637edb84cfdbfd9a63b87c1c.mockapi.io/users`)
+            .then((res) => {
+              const found = res.data.findIndex(
+                (e) => e.username === form.username
+              );
+              if (found === -1) {
+                setShow(true);
+                setTimeout(() => {
+                  axios
+                    .post(
+                      `https://637edb84cfdbfd9a63b87c1c.mockapi.io/users`,
+                      form
+                    )
+                    .then((res1) => {
+                      axios
+                        .get(
+                          `https://637edb84cfdbfd9a63b87c1c.mockapi.io/users`
+                        )
+                        .then((res2) => {
+                          dispatch(getAction("FECTH_USER_SUCCESS", res2.data));
+                        })
+                        .then((res3) => {
+                          navigate("/home/users");
+                        })
+                        .catch((err3) => console.log(err3));
+                    })
+                    .catch((err1) => console.log(err1));
+                }, 1000);
+              } else {
+                setRePassword({
+                  ...rePassword,
+                  errorPassword: "Username has already existed",
+                });
+              }
+            });
+        } else {
+          setCheckCode("You must enterCode");
+        }
       } else {
-        setCheckCode("You must enterCode");
+        setRePassword({
+          ...rePassword,
+          errorPassword: "Password not correctly",
+          status: false,
+        });
       }
-    } else {
-      setRePassword({
-        ...rePassword,
-        errorPassword: "Password not correctly",
-        status: false,
-      });
     }
   };
   return (
