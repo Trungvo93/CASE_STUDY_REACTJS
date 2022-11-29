@@ -14,12 +14,6 @@
   color: white;
 }
 
-.avatar {
-  width: 30px;
-  height: 30px;
-  object-fit: cover;
-}
-
 .toast-popup {
   position: fixed;
   right: 0;

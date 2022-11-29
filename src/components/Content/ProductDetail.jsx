@@ -31,31 +31,38 @@ const ProductDetail = () => {
     publisher: state.publisher,
     update_on: state.update_on,
   });
-  const [checkCode, setCheckCode] = useState("");
   const formSchema = yup.object().shape({
     category: yup.string().required(),
     title: yup.string().required(),
-    ISBN: yup.number("ISBN code must be numeric").required(),
+    ISBN: yup
+      .string()
+      .matches(
+        /^(?:ISBN(?:-13)?:?\ )?(?=[0-9]{13}$|(?=(?:[0-9]+[-\ ]){4})[-\ 0-9]{17}$)97[89][-\ ]?[0-9]{1,5}[-\ ]?[0-9]+[-\ ]?[0-9]+[-\ ]?[0-9]$/
+      )
+      .required(),
     amount: yup
       .number("Amount must be numberic ")
-      .min(1, "Amount must be more than zero")
+      .min(0, "Amount must be more than zero")
       .required(),
     author: yup.string().required(),
     publisher: yup.string().required(),
   });
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    setCheckCode("");
   };
 
-  const handleClickOpen = () => {
-    setConfirm(true);
+  const getDate = () => {
+    const updateTime = new Date();
+    const date = updateTime.getDate();
+    const month = updateTime.getMonth();
+    const year = updateTime.getFullYear();
+    form.update_on = date + "-" + month + "-" + year;
+    setForm({ ...form });
   };
-
   const handleClose = (e) => {
     setConfirm(false);
     getDate();
-    if (e.target.value === "confirm") {
+    if (e.target.value === "agree") {
       axios
         .put(
           `https://637edb84cfdbfd9a63b87c1c.mockapi.io/books/${state.id}`,
@@ -74,15 +81,9 @@ const ProductDetail = () => {
     }
   };
 
-  const getDate = () => {
-    const updateTime = new Date();
-    const date = updateTime.getDate();
-    const month = updateTime.getMonth();
-    const year = updateTime.getFullYear();
-    form.update_on = date + "-" + month + "-" + year;
-    setForm({ ...form });
+  const handleSubmit = () => {
+    setConfirm(true);
   };
-  const handleSubmit = (e) => {};
 
   return (
     <div className="container mb-5">
@@ -97,7 +98,7 @@ const ProductDetail = () => {
           <i className="bi bi-check-circle-fill fw-bold"></i>
           <strong className="ms-3 me-auto fw-bold">Success</strong>
         </Toast.Header>
-        <Toast.Body>Product has been save success!</Toast.Body>
+        <Toast.Body>Book has been save success!</Toast.Body>
       </Toast>
 
       <h3 className="my-5">BOOK DETAIL</h3>
@@ -245,10 +246,11 @@ const ProductDetail = () => {
           <br />
 
           <Button
+            type="submit"
             variant="contained"
             color="success"
             startIcon={<CheckIcon />}
-            onClick={handleClickOpen}
+            onSubmit={handleSubmit}
             className="px-4 me-4">
             Save
           </Button>
@@ -277,7 +279,7 @@ const ProductDetail = () => {
               <Button onClick={handleClose} value="cancel">
                 Disagree
               </Button>
-              <Button onClick={handleClose} autoFocus value="confirm">
+              <Button onClick={handleClose} autoFocus value="agree">
                 Agree
               </Button>
             </DialogActions>

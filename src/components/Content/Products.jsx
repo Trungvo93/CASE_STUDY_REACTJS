@@ -7,18 +7,24 @@ import { getAction } from "../redux/actions";
 import { useNavigate } from "react-router-dom";
 import Toast from "react-bootstrap/Toast";
 import Dropdown from "react-bootstrap/Dropdown";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
 
 const Products = () => {
+  const [confirm, setConfirm] = useState(false);
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const books = useSelector((state) => state.books);
   const loginedUser = useSelector((state) => state.loginedUser);
-  const [listBooks, setListUsers] = useState([...books]);
+  const [listBooks, setListBooks] = useState([...books]);
   const [findItem, setFindItem] = useState("");
-  const [typeFilter, setTypeFilter] = useState("title");
   const [idActive, setIdActive] = useState(1);
+  const [typeFilter, setTypeFilter] = useState("title");
   const [pageNumbers, setPageNumbers] = useState([]);
+  const [itemDelete, setItemDelete] = useState({});
   const getPageNumbers = (list) => {
     const pages = [];
     for (let i = 1; i <= Math.ceil(list.length / 10); i++) {
@@ -49,34 +55,39 @@ const Products = () => {
     const listFilter = books.filter((item) =>
       item[typeFilter].toString().trim().toLowerCase().includes(convertValue)
     );
-    setListUsers([...listFilter]);
+    setListBooks([...listFilter]);
     getPageNumbers(listFilter);
     setIdActive(1);
     const newList = listFilter.slice(0, 10);
     setUsersPerPage(newList);
   };
 
-  //Add user
-  const handleAddUser = () => {
+  //Add product
+  const handleAddProduct = () => {
     navigate("/home/addproduct");
   };
 
-  //Edit user
+  //Edit product
   const handleEditUser = (e) => {
     navigate("/home/productdetail", { state: e });
   };
+
+  const handleClickOpen = (e) => {
+    setConfirm(true);
+    setItemDelete(e);
+  };
   //Delete user and update state
-  const handleDelete = (item) => {
-    const confirmation = window.confirm(
-      "Are you sure you want to delete this user"
-    );
-    if (confirmation) {
+  const handleDelete = (e) => {
+    setConfirm(false);
+    if (e.target.value === "confirm") {
       axios
-        .delete(`https://637edb84cfdbfd9a63b87c1c.mockapi.io/books/${item.id}`)
+        .delete(
+          `https://637edb84cfdbfd9a63b87c1c.mockapi.io/books/${itemDelete.id}`
+        )
         .then((res) => {
           const newList = books.filter((e) => e.id !== res.data.id);
           dispatch(getAction("FECTH_BOOKS_SUCCESS", newList));
-          setListUsers([...newList]);
+          setListBooks([...newList]);
           getPageNumbers(newList);
           setIdActive(1);
           setUsersPerPage(newList.slice(0, 10));
@@ -165,7 +176,7 @@ const Products = () => {
         {loginedUser[0].role === "admin" ? (
           <button
             className="btn btn-primary fw-bold shadow"
-            onClick={handleAddUser}>
+            onClick={handleAddProduct}>
             + New Book
           </button>
         ) : (
@@ -175,7 +186,7 @@ const Products = () => {
 
       {/* Show users */}
       <table className="table table-hover">
-        <thead className="bg-secondary text-light ">
+        <thead className="bg-secondary text-light">
           <tr>
             <th>#</th>
             <th>Title</th>
@@ -185,7 +196,7 @@ const Products = () => {
             <th>Category</th>
             <th>Amount</th>
             <th>Note</th>
-            <th>Update time</th>
+            <th>Update</th>
             {loginedUser[0].role === "admin" ? <th>Action</th> : ""}
           </tr>
         </thead>
@@ -193,9 +204,7 @@ const Products = () => {
           {usersPerPage.map((e, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
-              <td>
-                <p className="m-0">{e.title}</p>
-              </td>
+              <td className="text-capitalize">{e.title}</td>
               <td className="text-capitalize">{e.ISBN}</td>
               <td className="text-capitalize">{e.author}</td>
               <td className="text-capitalize">{e.publisher}</td>
@@ -205,7 +214,7 @@ const Products = () => {
               <td className="text-capitalize">{e.update_on}</td>
               <td>
                 {loginedUser[0].role === "admin" ? (
-                  <>
+                  <div className="d-flex h-100">
                     <button
                       className="btn btn-warning me-3"
                       onClick={() => handleEditUser(e)}>
@@ -214,11 +223,11 @@ const Products = () => {
                     <button
                       className="btn btn-danger "
                       onClick={() => {
-                        handleDelete(e);
+                        handleClickOpen(e);
                       }}>
                       Delete
                     </button>
-                  </>
+                  </div>
                 ) : (
                   ""
                 )}
@@ -227,7 +236,7 @@ const Products = () => {
           ))}
           {/* Pagination - phân trang */}
           <tr>
-            <td colSpan={9} className="py-3">
+            <td colSpan={10} className="py-3">
               <div className="pagination d-flex justify-content-end">
                 <ul className="pagination">
                   {pageNumbers.map((i) => (
@@ -248,6 +257,26 @@ const Products = () => {
           </tr>
         </tbody>
       </table>
+
+      {/* Show dialog confirm when click button Delete */}
+      <Dialog
+        open={confirm}
+        onClose={handleDelete}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description">
+        <DialogTitle id="alert-dialog-title">
+          {"Are you sure you want to delete?"}
+        </DialogTitle>
+
+        <DialogActions>
+          <Button onClick={handleDelete} value="cancel">
+            Disagree
+          </Button>
+          <Button onClick={handleDelete} autoFocus value="confirm">
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
