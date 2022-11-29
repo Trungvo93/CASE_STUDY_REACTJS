@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { getAction } from "../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import "./AddUser.css";
+import "./ProductDetail.css";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
@@ -25,8 +26,10 @@ const ProductDetail = () => {
     title: state.title,
     ISBN: state.ISBN,
     amount: state.amount,
-    status: state.status,
+    author: state.author,
     note: state.note,
+    publisher: state.publisher,
+    update_on: state.update_on,
   });
   const [checkCode, setCheckCode] = useState("");
   const formSchema = yup.object().shape({
@@ -37,6 +40,8 @@ const ProductDetail = () => {
       .number("Amount must be numberic ")
       .min(1, "Amount must be more than zero")
       .required(),
+    author: yup.string().required(),
+    publisher: yup.string().required(),
   });
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -49,6 +54,7 @@ const ProductDetail = () => {
 
   const handleClose = (e) => {
     setConfirm(false);
+    getDate();
     if (e.target.value === "confirm") {
       axios
         .put(
@@ -68,6 +74,14 @@ const ProductDetail = () => {
     }
   };
 
+  const getDate = () => {
+    const updateTime = new Date();
+    const date = updateTime.getDate();
+    const month = updateTime.getMonth();
+    const year = updateTime.getFullYear();
+    form.update_on = date + "-" + month + "-" + year;
+    setForm({ ...form });
+  };
   const handleSubmit = (e) => {};
 
   return (
@@ -86,7 +100,7 @@ const ProductDetail = () => {
         <Toast.Body>Product has been save success!</Toast.Body>
       </Toast>
 
-      <h3>Product</h3>
+      <h3 className="my-5">BOOK DETAIL</h3>
 
       {/* Create user */}
       <Formik
@@ -95,80 +109,139 @@ const ProductDetail = () => {
         validationSchema={formSchema}
         onSubmit={handleSubmit}>
         <Form className="">
-          <Field
-            name="category"
-            value={form.category}
-            onChange={(e) => handleChange(e)}
-            className="form-control"
-            placeholder="Category"></Field>
-          <ErrorMessage
-            component="div"
-            name="category"
-            className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
-          <br />
-          <Field
-            className="form-control"
-            placeholder="Title"
-            name="title"
-            value={form.title}
-            onChange={(e) => handleChange(e)}></Field>
-          <ErrorMessage
-            component="div"
-            name="title"
-            className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
-          <br />
-          <Field
-            className="form-control"
-            placeholder="ISBN"
-            name="ISBN"
-            value={form.ISBN}
-            disabled
-            onChange={(e) => handleChange(e)}></Field>
-          <ErrorMessage
-            component="div"
-            name="ISBN"
-            className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
-          <div className="text-capitalize fw-bold text-danger mt-3">
-            {checkCode}
-          </div>
-          <Field
-            className="form-control mt-4"
-            placeholder="Amount"
-            name="amount"
-            value={form.amount}
-            onChange={(e) => handleChange(e)}></Field>
-          <ErrorMessage
-            component="div"
-            name="amount"
-            className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
-          <br />
-          {/* Choose role */}
-          <div role="group" aria-labelledby="my-radio-group">
-            <h5>Choose status</h5>
-            <label className="d-flex gap-2 role ">
-              <Field
-                name="status"
-                value="new"
-                type="radio"
-                onChange={(e) => handleChange(e)}></Field>
-              <span>New</span>
+          <div className="form-floating ">
+            <label
+              htmlFor="category"
+              className="select-label text-secondary text-opacity-75 ">
+              Category
             </label>
-            <label className="d-flex gap-2 role ">
-              <Field
-                name="status"
-                value="old"
-                type="radio"
-                onChange={(e) => handleChange(e)}></Field>
-              <span>Old</span>
-            </label>
+            <Field
+              id="category"
+              as="select"
+              name="category"
+              onChange={(e) => handleChange(e)}
+              className="form-select w-25">
+              <option value="default" disabled hidden>
+                -- Choose --
+              </option>
+              <option value="arts">Arts</option>
+              <option value="biographies">Biographies</option>
+              <option value="business">Business</option>
+              <option value="technology">Technology</option>
+              <option value="history">History</option>
+              <option value="other">Other</option>
+            </Field>
           </div>
+          <ErrorMessage
+            component="div"
+            name="category"
+            className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
           <br />
-          <Field
-            className="form-control"
-            placeholder="Note..."
+          <div className="form-floating mb-3">
+            <Field
+              id="title"
+              className="form-control w-50"
+              placeholder="Title"
+              name="title"
+              value={form.title}
+              onChange={(e) => handleChange(e)}></Field>
+            <label htmlFor="title">Title book</label>
+          </div>
+          <ErrorMessage
+            component="div"
+            name="title"
+            className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
+          <br />
+
+          <div className="d-flex gap-3">
+            <div>
+              <div className="form-floating mb-3">
+                <Field
+                  id="ISBN"
+                  className="form-control "
+                  placeholder="ISBN"
+                  name="ISBN"
+                  value={form.ISBN}
+                  disabled
+                  onChange={(e) => handleChange(e)}></Field>
+                <label htmlFor="ISBN">ISBN</label>
+              </div>
+              <ErrorMessage
+                component="div"
+                name="ISBN"
+                className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
+              <br />
+            </div>
+            <div>
+              <div className="form-floating mb-3">
+                <Field
+                  id="amount"
+                  className="form-control "
+                  placeholder="Amount"
+                  name="amount"
+                  value={form.amount}
+                  onChange={(e) => handleChange(e)}></Field>
+                <label htmlFor="title">Amount</label>
+              </div>
+              <ErrorMessage
+                component="div"
+                name="amount"
+                className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
+              <br />
+            </div>
+          </div>
+
+          <div className="d-flex gap-3">
+            <div className="w-25">
+              <div className="form-floating mb-3">
+                <Field
+                  id="author"
+                  className="form-control "
+                  placeholder="Author"
+                  name="author"
+                  value={form.author}
+                  onChange={(e) => handleChange(e)}></Field>
+                <label htmlFor="title">Author</label>
+              </div>
+              <ErrorMessage
+                component="div"
+                name="author"
+                className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
+              <br />
+            </div>
+            <div className="w-50">
+              <div className="form-floating mb-3">
+                <Field
+                  id="publisher"
+                  className="form-control"
+                  placeholder="Publisher"
+                  name="publisher"
+                  value={form.publisher}
+                  onChange={(e) => handleChange(e)}></Field>
+                <label htmlFor="title">Publisher</label>
+              </div>
+              <ErrorMessage
+                component="div"
+                name="publisher"
+                className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
+              <br />
+            </div>
+          </div>
+
+          <div className="form-floating mb-3">
+            <Field
+              id="note"
+              className="form-control"
+              placeholder="Note"
+              name="note"
+              value={form.note}
+              onChange={(e) => handleChange(e)}></Field>
+            <label htmlFor="title">Note</label>
+          </div>
+          <ErrorMessage
+            component="div"
             name="note"
-            value={form.note}
-            onChange={(e) => handleChange(e)}></Field>
+            className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
           <br />
 
           <Button

@@ -6,6 +6,8 @@ import axios from "axios";
 import { getAction } from "../redux/actions";
 import { useNavigate } from "react-router-dom";
 import Toast from "react-bootstrap/Toast";
+import Dropdown from "react-bootstrap/Dropdown";
+
 const Products = () => {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
@@ -14,6 +16,7 @@ const Products = () => {
   const loginedUser = useSelector((state) => state.loginedUser);
   const [listBooks, setListUsers] = useState([...books]);
   const [findItem, setFindItem] = useState("");
+  const [typeFilter, setTypeFilter] = useState("title");
   const [idActive, setIdActive] = useState(1);
   const [pageNumbers, setPageNumbers] = useState([]);
   const getPageNumbers = (list) => {
@@ -44,9 +47,8 @@ const Products = () => {
     setFindItem(e.target.value);
     const convertValue = e.target.value.trim().toLowerCase();
     const listFilter = books.filter((item) =>
-      item.title.trim().toLowerCase().includes(convertValue)
+      item[typeFilter].toString().trim().toLowerCase().includes(convertValue)
     );
-    console.log(listFilter);
     setListUsers([...listFilter]);
     getPageNumbers(listFilter);
     setIdActive(1);
@@ -110,15 +112,56 @@ const Products = () => {
       {/* Add user */}
       <div className="d-flex justify-content-between my-4">
         <h3>Books</h3>
-
         {/* Filter users */}
-        <input
-          type="text"
-          value={findItem}
-          placeholder="Search..."
-          className="form-control w-50"
-          onChange={handleFilter}
-        />
+        <div className="d-flex gap-2 w-75">
+          <Dropdown
+            onSelect={(e) => {
+              setTypeFilter(e);
+            }}>
+            <Dropdown.Toggle
+              variant="warning"
+              id="dropdown-basic"
+              className="text-capitalize">
+              Filter {typeFilter}
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item
+                eventKey="title"
+                className={typeFilter === "title" ? "active" : ""}>
+                Title
+              </Dropdown.Item>
+              <Dropdown.Item
+                eventKey="ISBN"
+                className={typeFilter === "ISBN" ? "active" : ""}>
+                ISBN
+              </Dropdown.Item>
+              <Dropdown.Item
+                eventKey="author"
+                className={typeFilter === "author" ? "active" : ""}>
+                Author
+              </Dropdown.Item>
+              <Dropdown.Item
+                eventKey="publisher"
+                className={typeFilter === "publisher" ? "active" : ""}>
+                Publisher
+              </Dropdown.Item>
+              <Dropdown.Item
+                eventKey="category"
+                className={typeFilter === "category" ? "active" : ""}>
+                Category
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          <input
+            type="text"
+            value={findItem}
+            placeholder="Search..."
+            className="form-control "
+            onChange={handleFilter}
+          />
+        </div>
+
         {loginedUser[0].role === "admin" ? (
           <button
             className="btn btn-primary fw-bold shadow"
@@ -132,13 +175,17 @@ const Products = () => {
 
       {/* Show users */}
       <table className="table table-hover">
-        <thead>
+        <thead className="bg-secondary text-light ">
           <tr>
             <th>#</th>
             <th>Title</th>
             <th>ISBN</th>
+            <th>Author</th>
+            <th>Publisher</th>
+            <th>Category</th>
             <th>Amount</th>
             <th>Note</th>
+            <th>Update time</th>
             {loginedUser[0].role === "admin" ? <th>Action</th> : ""}
           </tr>
         </thead>
@@ -150,8 +197,12 @@ const Products = () => {
                 <p className="m-0">{e.title}</p>
               </td>
               <td className="text-capitalize">{e.ISBN}</td>
+              <td className="text-capitalize">{e.author}</td>
+              <td className="text-capitalize">{e.publisher}</td>
+              <td className="text-capitalize">{e.category}</td>
               <td className="text-capitalize">{e.amount}</td>
               <td className="text-capitalize">{e.note}</td>
+              <td className="text-capitalize">{e.update_on}</td>
               <td>
                 {loginedUser[0].role === "admin" ? (
                   <>
@@ -176,7 +227,7 @@ const Products = () => {
           ))}
           {/* Pagination - phân trang */}
           <tr>
-            <td colSpan={8} className="py-3">
+            <td colSpan={9} className="py-3">
               <div className="pagination d-flex justify-content-end">
                 <ul className="pagination">
                   {pageNumbers.map((i) => (
