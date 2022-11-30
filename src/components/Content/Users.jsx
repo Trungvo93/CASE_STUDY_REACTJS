@@ -210,7 +210,7 @@ const Users = () => {
             <th>Role</th>
             <th>School Code</th>
             <th>Student Code</th>
-            {loginedUser[0].role === "admin" ? <th>Action</th> : ""}
+            <th>{loginedUser[0].role === "admin" ? "Action" : ""}</th>
           </tr>
         </thead>
         <tbody>

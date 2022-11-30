@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { getAction } from "../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
-import "./AddUser.css";
 import "./ProductDetail.css";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -163,8 +162,7 @@ const ProductDetail = () => {
                   placeholder="ISBN"
                   name="ISBN"
                   value={form.ISBN}
-                  disabled
-                  onChange={(e) => handleChange(e)}></Field>
+                  disabled></Field>
                 <label htmlFor="ISBN">ISBN</label>
               </div>
               <ErrorMessage

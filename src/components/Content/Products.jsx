@@ -197,7 +197,7 @@ const Products = () => {
             <th>Amount</th>
             <th>Note</th>
             <th>Update</th>
-            {loginedUser[0].role === "admin" ? <th>Action</th> : ""}
+            <th>{loginedUser[0].role === "admin" ? "Action" : ""}</th>
           </tr>
         </thead>
         <tbody>
