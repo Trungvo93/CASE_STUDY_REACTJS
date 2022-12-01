@@ -1,7 +1,17 @@
 import { useSelect } from "@mui/base";
 import React from "react";
 import { NavLink } from "react-router-dom";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 const Menu = () => {
+  const [type, setType] = React.useState("");
+
+  const handleChange = (event) => {
+    setType(event.target.value);
+  };
   let activeStyle = {
     color: `rgb(33, 43, 54)`,
     backgroundColor: `rgba(145, 158, 171, 0.16)`,
@@ -10,6 +20,7 @@ const Menu = () => {
   let noneActiveStyle = {
     color: `rgb(99, 115, 129)`,
   };
+
   return (
     <>
       <div>
@@ -37,11 +48,18 @@ const Menu = () => {
           <p className="m-0">Products</p>
         </NavLink>
         <NavLink
-          to="borrowreturnbooks"
+          to="borrow"
           className="d-flex gap-3 align-items-center text-decoration-none p-3 rounded-2"
           style={({ isActive }) => (isActive ? activeStyle : noneActiveStyle)}>
-          <i className="bi bi-journal-text"></i>
-          <p className="m-0">Borrow/Return Books</p>
+          <i class="bi bi-plus-circle"></i>
+          <p className="m-0">Borrow</p>
+        </NavLink>
+        <NavLink
+          to="return"
+          className="d-flex gap-3 align-items-center text-decoration-none p-3 rounded-2"
+          style={({ isActive }) => (isActive ? activeStyle : noneActiveStyle)}>
+          <i class="bi bi-dash-circle"></i>
+          <p className="m-0">Return</p>
         </NavLink>
       </div>
     </>

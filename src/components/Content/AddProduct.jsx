@@ -213,7 +213,7 @@ const AddProduct = () => {
                   name="amount"
                   value={form.amount}
                   onChange={(e) => handleChange(e)}></Field>
-                <label htmlFor="title" className="text-success">
+                <label htmlFor="amount" className="text-success">
                   Amount
                 </label>
               </div>
@@ -235,7 +235,7 @@ const AddProduct = () => {
                   name="author"
                   value={form.author}
                   onChange={(e) => handleChange(e)}></Field>
-                <label htmlFor="title" className="text-success">
+                <label htmlFor="author" className="text-success">
                   Author
                 </label>
               </div>
@@ -254,7 +254,7 @@ const AddProduct = () => {
                   name="publisher"
                   value={form.publisher}
                   onChange={(e) => handleChange(e)}></Field>
-                <label htmlFor="title" className="text-success">
+                <label htmlFor="publisher" className="text-success">
                   Publisher
                 </label>
               </div>
@@ -274,7 +274,7 @@ const AddProduct = () => {
               name="note"
               value={form.note}
               onChange={(e) => handleChange(e)}></Field>
-            <label htmlFor="title" className="text-success">
+            <label htmlFor="note" className="text-success">
               Note
             </label>
           </div>

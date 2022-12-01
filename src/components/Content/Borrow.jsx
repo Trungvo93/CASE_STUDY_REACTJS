@@ -2,12 +2,17 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { width } from "@mui/system";
-
-const BorrowReturnBooks = () => {
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import axios from "axios";
+import * as yup from "yup";
+const Borrow = () => {
   const books = useSelector((state) => state.books);
   const users = useSelector((state) => state.users);
   const students = users.filter((e) => e.role === "student");
+  const [stateID, setStateID] = useState({
+    bookID: "",
+    studentID: "",
+  });
   const [bookInfo, setBookInfo] = useState({
     ISBN: "",
     amount: "",
@@ -22,6 +27,23 @@ const BorrowReturnBooks = () => {
     name: "",
     studentCode: "",
   });
+  const [borrowInfo, setBorrowInfo] = useState({
+    ISBN: "",
+    studentCode: "",
+    amount: "",
+    dayBorrow: "",
+    dayReturn: "",
+    dayReturned: "",
+    note: "",
+  });
+  const formSchema = yup.object().shape({
+    amount: yup
+      .number("Amount must be numberic ")
+      .min(1, "Amount must be more than zero")
+      .max(bookInfo.amount, `Amount must be lower ${bookInfo.amount}`)
+      .required(),
+    dayReturn: yup.date().required(),
+  });
   const date = new Date();
   const minDate =
     date.getFullYear() +
@@ -29,6 +51,27 @@ const BorrowReturnBooks = () => {
     Number(date.getMonth() + 1) +
     "-" +
     date.getDate();
+
+  const handleChange = (e) => {
+    setBorrowInfo({ ...borrowInfo, [e.target.name]: e.target.value });
+  };
+  const handleSubmit = () => {
+    if (bookInfo.ISBN !== "" && userInfo.studentCode !== "") {
+      axios
+        .post(`https://637edb84cfdbfd9a63b87c1c.mockapi.io/borrowandreturn`)
+        .then((res) => {})
+        .catch((err) => console.log("Error post item: ", err));
+      const newAmount = bookInfo.amount - borrowInfo.amount;
+      setBookInfo({ ...bookInfo, amount: newAmount });
+      axios
+        .put(
+          `https://637edb84cfdbfd9a63b87c1c.mockapi.io/books/${stateID.bookID}`,
+          bookInfo
+        )
+        .then((res) => {})
+        .catch((err) => console.log("Error put item book: ", err));
+    }
+  };
 
   return (
     <div className="container mb-5">
@@ -44,7 +87,10 @@ const BorrowReturnBooks = () => {
               const substrings = value.split("ISBN:");
               const index = books.findIndex((e) => e.ISBN === substrings[1]);
               if (index >= 0) {
+                setStateID({ ...stateID, bookID: books[index].id });
+
                 setBookInfo({ ...books[index] });
+                setBorrowInfo({ ...borrowInfo, ISBN: books[index].ISBN });
               }
             }}
             freeSolo
@@ -102,11 +148,14 @@ const BorrowReturnBooks = () => {
               );
               if (index >= 0) {
                 setUserInfo({ ...users[index] });
+                setBorrowInfo({
+                  ...borrowInfo,
+                  studentCode: books[index].studentCode,
+                });
               }
-              console.log(minDate);
             }}
             freeSolo
-            id="free-solo-2-demo"
+            id="userInfo"
             disableClearable
             options={students.map((option) => {
               return option.name + " - StudentCode:" + option.studentCode;
@@ -131,18 +180,54 @@ const BorrowReturnBooks = () => {
               <span className="fw-bold text-primary">Name:</span>
               {userInfo.name}
             </div>
-            <div className="d-flex align-items-center gap-2">
-              <span className="fw-bold text-primary">Date return:</span>
-              <input className="form-control w-50" type="date" min={minDate} />
-            </div>
-            <div className="d-flex align-items-center gap-2">
-              <span className="fw-bold text-primary">Amount:</span>
-              <input className="form-control w-50" />
-            </div>
-            <div className="d-flex align-items-center gap-2">
-              <button className="btn btn-primary">Submit</button>
-              <button className="btn btn-secondary">Cancel</button>
-            </div>
+
+            <Formik
+              initialValues={borrowInfo}
+              enableReinitialize={true}
+              validationSchema={formSchema}
+              onSubmit={handleSubmit}>
+              <Form>
+                <div className="form-floating mb-3 w-50">
+                  <Field
+                    min={minDate}
+                    type="date"
+                    id="dayReturn"
+                    className="form-control"
+                    placeholder="Day Return"
+                    name="dayReturn"
+                    value={borrowInfo.dayReturn}
+                    onChange={(e) => handleChange(e)}></Field>
+                  <label htmlFor="dayReturn" className="text-success">
+                    Day return
+                  </label>
+                </div>
+                <ErrorMessage
+                  component="div"
+                  name="dayReturn"
+                  className="text-capitalize fw-bold text-danger my-3"></ErrorMessage>
+                <div className="form-floating mb-3 w-25">
+                  <Field
+                    id="amount"
+                    className="form-control "
+                    placeholder="Amount"
+                    name="amount"
+                    value={borrowInfo.amount}
+                    onChange={(e) => handleChange(e)}></Field>
+                  <label htmlFor="amount" className="text-success">
+                    Amount
+                  </label>
+                </div>
+                <ErrorMessage
+                  component="div"
+                  name="amount"
+                  className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
+                <br />
+
+                <button className="btn btn-primary" type="submit">
+                  Submit
+                </button>
+              </Form>
+            </Formik>
           </div>
         </div>
       </div>
@@ -169,4 +254,4 @@ const BorrowReturnBooks = () => {
   );
 };
 
-export default BorrowReturnBooks;
+export default Borrow;

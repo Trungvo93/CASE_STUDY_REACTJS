@@ -37,6 +37,12 @@ const Layout = () => {
         dispatch(getAction("FECTH_BOOKS_SUCCESS", res.data));
       })
       .catch((err) => console.log(err));
+    axios
+      .get(`https://637edb84cfdbfd9a63b87c1c.mockapi.io/books`)
+      .then((res) => {
+        dispatch(getAction("FECTH_BORROWANDRETURN_SUCCESS", res.data));
+      })
+      .catch((err) => console.log(err));
   }, []);
   if (loginedUser.length > 0) {
     return (

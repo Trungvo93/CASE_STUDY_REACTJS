@@ -11,7 +11,8 @@ import AddUser from "./Content/AddUser";
 import UserDetail from "./Content/UserDetail";
 import AddProduct from "./Content/AddProduct";
 import ProductDetail from "./Content/ProductDetail";
-import BorrowReturnBooks from "./Content/BorrowReturnBooks";
+import Borrow from "./Content/Borrow";
+import Return from "./Content/Return";
 const Router = () => {
   return (
     <Provider store={store}>
@@ -26,9 +27,8 @@ const Router = () => {
             <Route path="adduser" element={<AddUser />}></Route>
             <Route path="addproduct" element={<AddProduct />}></Route>
             <Route path="productdetail" element={<ProductDetail />}></Route>
-            <Route
-              path="borrowreturnbooks"
-              element={<BorrowReturnBooks />}></Route>
+            <Route path="borrow" element={<Borrow />}></Route>
+            <Route path="return" element={<Return />}></Route>
           </Route>
         </Routes>
       </BrowserRouter>
