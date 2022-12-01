@@ -51,14 +51,14 @@ const Menu = () => {
           to="borrow"
           className="d-flex gap-3 align-items-center text-decoration-none p-3 rounded-2"
           style={({ isActive }) => (isActive ? activeStyle : noneActiveStyle)}>
-          <i class="bi bi-plus-circle"></i>
+          <i className="bi bi-plus-circle"></i>
           <p className="m-0">Borrow</p>
         </NavLink>
         <NavLink
           to="return"
           className="d-flex gap-3 align-items-center text-decoration-none p-3 rounded-2"
           style={({ isActive }) => (isActive ? activeStyle : noneActiveStyle)}>
-          <i class="bi bi-dash-circle"></i>
+          <i className="bi bi-dash-circle"></i>
           <p className="m-0">Return</p>
         </NavLink>
       </div>
