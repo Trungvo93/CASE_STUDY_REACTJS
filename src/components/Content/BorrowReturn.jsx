@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -6,14 +6,14 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { getAction } from "../redux/actions";
 import axios from "axios";
 import * as yup from "yup";
+import "./BorrowReturn.css";
 import Toast from "react-bootstrap/Toast";
+import Dropdown from "react-bootstrap/Dropdown";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
-import CheckIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
-const Borrow = () => {
+const BorrowReturn = () => {
   const [confirmReturn, setConfirmReturn] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);
@@ -24,9 +24,47 @@ const Borrow = () => {
   const [listBooks, setListBooks] = useState([...books]);
   const users = useSelector((state) => state.users);
   const [borrowList, setBorrowList] = useState([...borrowandreturnList]);
+  const [findItem, setFindItem] = useState("");
+  const [idActive, setIdActive] = useState(1);
+  const [typeFilter, setTypeFilter] = useState("studentCode");
+  const [pageNumbers, setPageNumbers] = useState([]);
   const dispatch = useDispatch();
   const students = users.filter((e) => e.role === "student");
+  const getPageNumbers = (list) => {
+    const pages = [];
+    for (let i = 1; i <= Math.ceil(list.length / 10); i++) {
+      pages.push(i);
+    }
+    setPageNumbers([...pages]);
+  };
+  useEffect(() => {
+    getPageNumbers(borrowList);
+  }, []);
 
+  const [bookPerPage, setBookPerPage] = useState([...borrowList.slice(0, 10)]);
+
+  //Jump pageNumbers
+  const handleJumpPage = (index) => {
+    const firstIndex = index * 10 - 10;
+    const lastIndex = index * 10;
+    const newList = borrowList.slice(firstIndex, lastIndex);
+    setBookPerPage(newList);
+    setIdActive(index);
+  };
+
+  //Filter item
+  const handleFilter = (e) => {
+    setFindItem(e.target.value);
+    const convertValue = e.target.value.trim().toLowerCase();
+    const listFilter = borrowList.filter((item) =>
+      item[typeFilter].toString().trim().toLowerCase().includes(convertValue)
+    );
+    setListBooks([...listFilter]);
+    getPageNumbers(listFilter);
+    setIdActive(1);
+    const newList = listFilter.slice(0, 10);
+    setBookPerPage(newList);
+  };
   const [bookInfo, setBookInfo] = useState({
     bookID: "",
     ISBN: "",
@@ -116,6 +154,10 @@ const Borrow = () => {
             .then((res2) => {
               dispatch(getAction("FECTH_BORROWANDRETURN_SUCCESS", res2.data));
               setBorrowList([...res2.data]);
+              const firstIndex = idActive * 10 - 10;
+              const lastIndex = idActive * 10;
+              const newList = res2.data.slice(firstIndex, lastIndex);
+              setBookPerPage(newList);
             })
             .catch((err2) => console.log(err2));
         })
@@ -189,6 +231,12 @@ const Borrow = () => {
               .then((res2) => {
                 dispatch(getAction("FECTH_BORROWANDRETURN_SUCCESS", res2.data));
                 setBorrowList([...res2.data]);
+                getPageNumbers(res2.data);
+
+                const firstIndex = idActive * 10 - 10;
+                const lastIndex = idActive * 10;
+                const newList = res2.data.slice(firstIndex, lastIndex);
+                setBookPerPage(newList);
               })
               .catch((err2) => console.log(err2));
           })
@@ -416,6 +464,55 @@ const Borrow = () => {
         <h3 className="fw-bold text-center text-primary mt-5">
           List Borrow and Return
         </h3>
+        <div className="d-flex gap-2 w-75 my-4">
+          {/* Filter */}
+          <Dropdown
+            onSelect={(e) => {
+              setTypeFilter(e);
+            }}>
+            <Dropdown.Toggle
+              variant="warning"
+              id="dropdown-basic"
+              className="text-capitalize">
+              Filter {typeFilter}
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item
+                eventKey="studentCode"
+                className={typeFilter === "title" ? "studentCode" : ""}>
+                Student Code
+              </Dropdown.Item>
+              <Dropdown.Item
+                eventKey="ISBN"
+                className={typeFilter === "ISBN" ? "active" : ""}>
+                ISBN
+              </Dropdown.Item>
+              <Dropdown.Item
+                eventKey="dayBorrow"
+                className={typeFilter === "dayBorrow" ? "active" : ""}>
+                Day borrow
+              </Dropdown.Item>
+              <Dropdown.Item
+                eventKey="dayReturn"
+                className={typeFilter === "dayReturn" ? "active" : ""}>
+                Day return
+              </Dropdown.Item>
+              <Dropdown.Item
+                eventKey="dayReturned"
+                className={typeFilter === "dayReturned" ? "active" : ""}>
+                Day returned
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          <input
+            type="text"
+            value={findItem}
+            placeholder="Search..."
+            className="form-control input-filter"
+            onChange={handleFilter}
+          />
+        </div>
         <table className="table table-hover">
           <thead className="bg-secondary text-light">
             <tr>
@@ -429,7 +526,7 @@ const Borrow = () => {
             </tr>
           </thead>
           <tbody>
-            {borrowList.map((e) => (
+            {bookPerPage.map((e) => (
               <tr key={e.id} className="align-middle">
                 <td>{e.studentCode}</td>
                 <td>{e.ISBN}</td>
@@ -451,6 +548,27 @@ const Borrow = () => {
                 </td>
               </tr>
             ))}
+            {/* Pagination - phân trang */}
+            <tr>
+              <td colSpan={7} className="py-3">
+                <div className="pagination d-flex justify-content-end">
+                  <ul className="pagination">
+                    {pageNumbers.map((i) => (
+                      <li
+                        className={`page-item page-link ${
+                          idActive === i ? "active" : ""
+                        }`}
+                        key={i}
+                        onClick={() => {
+                          handleJumpPage(i);
+                        }}>
+                        {i}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -474,6 +592,7 @@ const Borrow = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      {/* Show dialog confirm when click button return */}
 
       <Dialog
         open={confirmReturn}
@@ -497,4 +616,4 @@ const Borrow = () => {
   );
 };
 
-export default Borrow;
+export default BorrowReturn;

@@ -64,11 +64,6 @@ const UserDetail = () => {
     email: yup.string().email().required(),
   });
   const handleChange = (e) => {
-    if (form.role !== "student") {
-      form.studentCode = "";
-      form.schoolCode = "";
-      setForm({ ...form });
-    }
     setForm({ ...form, [e.target.name]: e.target.value });
     setCheckCode("");
     if (e.target.name === "password") {
@@ -302,29 +297,17 @@ const UserDetail = () => {
 
           {/* Choose role */}
           <div role="group" aria-labelledby="my-radio-group">
-            <h5 className="fw-bold text-success">Choose role</h5>
+            <h5 className="fw-bold text-success">Your role</h5>
             <label className="d-flex gap-2 role ">
-              <Field
-                name="role"
-                value="admin"
-                type="radio"
-                onChange={(e) => handleChange(e)}></Field>
+              <Field disabled name="role" value="admin" type="radio"></Field>
               <span>Admin</span>
             </label>
             <label className="d-flex gap-2 role ">
-              <Field
-                name="role"
-                value="library"
-                type="radio"
-                onChange={(e) => handleChange(e)}></Field>
+              <Field disabled name="role" value="library" type="radio"></Field>
               <span>Library</span>
             </label>
             <label className="d-flex gap-2 role ">
-              <Field
-                name="role"
-                value="student"
-                type="radio"
-                onChange={(e) => handleChange(e)}></Field>
+              <Field disabled name="role" value="student" type="radio"></Field>
               <span>Student</span>
             </label>
           </div>
@@ -337,7 +320,8 @@ const UserDetail = () => {
                   className="form-control mt-3"
                   placeholder="Student Code"
                   name="studentCode"
-                  onChange={(e) => handleChange(e)}></Field>
+                  value={form.studentCode}
+                  disabled></Field>
                 <label htmlFor="studentCode" className="text-success">
                   Student Code
                 </label>
@@ -349,11 +333,12 @@ const UserDetail = () => {
 
               <div className="form-floating mb-3">
                 <Field
+                  value={form.schoolCode}
                   id="schoolCode"
                   className="form-control "
                   placeholder="School Code"
                   name="schoolCode"
-                  onChange={(e) => handleChange(e)}></Field>
+                  disabled></Field>
                 <label htmlFor="studschoolCodeentCode" className="text-success">
                   School Code
                 </label>
