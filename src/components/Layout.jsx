@@ -43,7 +43,10 @@ const Layout = () => {
         const newList = [...res.data];
         res.data.map((item, index) => {
           const currentDate = new Date();
-          if (Date.parse(currentDate.toString()) > Date.parse(item.dayReturn)) {
+          if (
+            Date.parse(currentDate.toString()) > Date.parse(item.dayReturn) &&
+            item.dayReturned === ""
+          ) {
             newList[index].status = "Expires";
             axios
               .put(
