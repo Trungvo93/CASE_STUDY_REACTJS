@@ -40,7 +40,22 @@ const Layout = () => {
     axios
       .get(`https://637edb84cfdbfd9a63b87c1c.mockapi.io/borrowandreturn`)
       .then((res) => {
-        dispatch(getAction("FECTH_BORROWANDRETURN_SUCCESS", res.data));
+        const newList = [...res.data];
+        res.data.map((item, index) => {
+          const currentDate = new Date();
+          if (Date.parse(currentDate.toString()) > Date.parse(item.dayReturn)) {
+            newList[index].status = "Expires";
+            axios
+              .put(
+                `https://637edb84cfdbfd9a63b87c1c.mockapi.io/borrowandreturn/${item.id}`,
+                { ...item, status: "Expires" }
+              )
+              .catch((err1) => {
+                console.log("Error check expires: ", err1);
+              });
+          }
+        });
+        dispatch(getAction("FECTH_BORROWANDRETURN_SUCCESS", newList));
       })
       .catch((err) => console.log(err));
   }, []);
@@ -53,7 +68,7 @@ const Layout = () => {
             <hr />
             <Menu></Menu>
           </div>
-          <div className="col-10 p-0">
+          <div className="col-10 p-0 bg-content">
             <div className="sticky-top stickyTop d-flex justify-content-between align-items-center px-5  shadow-sm">
               <div>
                 <img
@@ -80,7 +95,8 @@ const Layout = () => {
                 </div>
               </div>
             </div>
-            <div className="container mt-5">
+
+            <div className="container mt-5 ">
               <Outlet></Outlet>
             </div>
           </div>
