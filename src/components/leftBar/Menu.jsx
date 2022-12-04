@@ -23,36 +23,36 @@ const Menu = () => {
 
   return (
     <>
-      <div>
+      <div className="d-none d-md-block">
         <NavLink
           to="dashboard"
-          className="d-flex gap-3 align-items-center text-decoration-none p-3 rounded-2"
+          className="d-flex gap-3 align-items-center text-decoration-none p-3 rounded-2 "
           style={({ isActive }) => (isActive ? activeStyle : noneActiveStyle)}>
-          <i className="bi bi-bar-chart"></i>
-          <p className="m-0">Dashboard</p>
+          <i className="bi bi-bar-chart flex-shrink-1"></i>
+          <p className="m-0  d-none d-xl-block">Dashboard</p>
         </NavLink>
 
         <NavLink
           to="users"
-          className="d-flex gap-3 align-items-center text-decoration-none p-3 rounded-2"
+          className="d-flex gap-3 align-items-center text-decoration-none p-3 rounded-2 "
           style={({ isActive }) => (isActive ? activeStyle : noneActiveStyle)}>
-          <i className="bi bi-people"></i>
-          <p className="m-0">Users</p>
+          <i className="bi bi-people flex-shrink-1"></i>
+          <p className="m-0  d-none d-xl-block">Users</p>
         </NavLink>
 
         <NavLink
           to="products"
-          className="d-flex gap-3 align-items-center text-decoration-none p-3 rounded-2"
+          className="d-flex gap-3 align-items-center text-decoration-none p-3 rounded-2 "
           style={({ isActive }) => (isActive ? activeStyle : noneActiveStyle)}>
-          <i className="bi bi-journal-text"></i>
-          <p className="m-0">Products</p>
+          <i className="bi bi-journal-text flex-shrink-1"></i>
+          <p className="m-0  d-none d-xl-block">Products</p>
         </NavLink>
         <NavLink
           to="borrowreturn"
           className="d-flex gap-3 align-items-center text-decoration-none p-3 rounded-2"
           style={({ isActive }) => (isActive ? activeStyle : noneActiveStyle)}>
-          <i className="bi bi-basket"></i>
-          <p className="m-0">Borrow/Return</p>
+          <i className="bi bi-basket flex-shrink-1"></i>
+          <p className="m-0  d-none d-xl-block">Borrow/Return</p>
         </NavLink>
       </div>
     </>

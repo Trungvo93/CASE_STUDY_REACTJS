@@ -10,7 +10,7 @@ const TopInfo = () => {
   };
   return (
     <>
-      <div>
+      <div className="d-none d-xl-block">
         <img
           src={`${process.env.PUBLIC_URL}/images/logo_library.png`}
           alt=""
@@ -18,7 +18,7 @@ const TopInfo = () => {
           onClick={gotoDashboard}
         />
       </div>
-      <div className="bg-secondary avatarLogin p-3 mx-3  rounded-3  logo ">
+      <div className="bg-secondary avatarLogin p-3 mx-3  rounded-3  logo   d-none d-xl-block">
         <div className="d-flex gap-3 align-items-center">
           <img
             src={loginedUser.length > 0 ? loginedUser[0].avatar : ""}

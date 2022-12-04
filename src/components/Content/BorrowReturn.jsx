@@ -97,7 +97,6 @@ const BorrowReturn = () => {
   });
 
   const date = new Date();
-
   const minDate =
     date.getFullYear() +
     "-" +

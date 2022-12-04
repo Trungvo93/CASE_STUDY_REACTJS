@@ -200,7 +200,7 @@ const Users = () => {
       </div>
 
       {/* Show users */}
-      <table className="table table-hover">
+      <table className="table table-hover w-100">
         <thead className="bg-secondary text-light">
           <tr>
             <th>#</th>

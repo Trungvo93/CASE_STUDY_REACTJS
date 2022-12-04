@@ -6,6 +6,7 @@ import { Outlet } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getAction } from "./redux/actions";
+import { NavLink } from "react-router-dom";
 
 import axios from "axios";
 const Layout = () => {
@@ -13,6 +14,14 @@ const Layout = () => {
   const loginedUser = useSelector((state) => state.loginedUser);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  let activeStyle = {
+    color: `rgb(33, 43, 54)`,
+    backgroundColor: `rgba(145, 158, 171, 0.16)`,
+    fontWeight: "bold",
+  };
+  let noneActiveStyle = {
+    color: `rgb(99, 115, 129)`,
+  };
   const handleLogout = () => {
     dispatch(getAction("FECTH_LOGIN_SUCCESS", []));
     navigate("/");
@@ -66,12 +75,12 @@ const Layout = () => {
     return (
       <div className="container-fluid">
         <div className="row">
-          <div className="col-2 p-3 d-flex flex-column gap-3 border-dotted leftMenu">
+          <div className="col-0 col-lg-1 col-xl-2 p-3 d-none d-lg-flex flex-column gap-3 border-dotted leftMenu">
             <TopInfo></TopInfo>
-            <hr />
+            <hr className=" d-none d-xl-block" />
             <Menu></Menu>
           </div>
-          <div className="col-10 p-0 bg-content">
+          <div className="col-12 col-lg-11 col-xl-10 p-0 pb-2 bg-content ">
             <div className="sticky-top stickyTop d-flex justify-content-between align-items-center px-5  shadow-sm">
               <div>
                 <img
@@ -79,6 +88,46 @@ const Layout = () => {
                   alt=""
                   className="logoLibrary"
                 />
+              </div>
+              <div className="d-flex gap-md-5 gap-2 d-lg-none">
+                <NavLink
+                  to="dashboard"
+                  className="d-flex gap-3 align-items-center text-decoration-none p-3 rounded-2 "
+                  style={({ isActive }) =>
+                    isActive ? activeStyle : noneActiveStyle
+                  }>
+                  <i className="bi bi-bar-chart flex-shrink-1"></i>
+                  <p className="m-0  d-none d-xl-block">Dashboard</p>
+                </NavLink>
+
+                <NavLink
+                  to="users"
+                  className="d-flex gap-3 align-items-center text-decoration-none p-3 rounded-2 "
+                  style={({ isActive }) =>
+                    isActive ? activeStyle : noneActiveStyle
+                  }>
+                  <i className="bi bi-people flex-shrink-1"></i>
+                  <p className="m-0  d-none d-xl-block">Users</p>
+                </NavLink>
+
+                <NavLink
+                  to="products"
+                  className="d-flex gap-3 align-items-center text-decoration-none p-3 rounded-2 "
+                  style={({ isActive }) =>
+                    isActive ? activeStyle : noneActiveStyle
+                  }>
+                  <i className="bi bi-journal-text flex-shrink-1"></i>
+                  <p className="m-0  d-none d-xl-block">Products</p>
+                </NavLink>
+                <NavLink
+                  to="borrowreturn"
+                  className="d-flex gap-3 align-items-center text-decoration-none p-3 rounded-2"
+                  style={({ isActive }) =>
+                    isActive ? activeStyle : noneActiveStyle
+                  }>
+                  <i className="bi bi-basket flex-shrink-1"></i>
+                  <p className="m-0  d-none d-xl-block">Borrow/Return</p>
+                </NavLink>
               </div>
               <div className="logo">
                 <div className="logoRound">

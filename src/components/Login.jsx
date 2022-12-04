@@ -48,7 +48,7 @@ const Login = () => {
   };
   return (
     <div className="container-fluid row login">
-      <div className="col-3 leftShadow ">
+      <div className="d-none d-lg-block col-lg-3 leftShadow ">
         <div className="loginLeft">
           <h1>Hi, Welcome Back</h1>
           <img
@@ -58,11 +58,14 @@ const Login = () => {
           />
         </div>
       </div>
-      <div className="col-9">
+      <div className="col-12 col-lg-9">
         <div className="loginRight">
           {/* Login form */}
           <ThemeProvider theme={theme}>
-            <Container component="main" maxWidth="xs">
+            <Container
+              component="main"
+              maxWidth="xs"
+              className=" py-5 rounded shadow ">
               <CssBaseline />
               <Box
                 sx={{
