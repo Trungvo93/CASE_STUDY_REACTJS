@@ -173,6 +173,7 @@ const AddUser = () => {
         onClose={() => setShowError(false)}
         show={showError}
         delay={3000}
+        animation={true}
         autohide
         className="toast-popup bg-danger text-white">
         <Toast.Header className="bg-danger text-white">
@@ -188,6 +189,7 @@ const AddUser = () => {
         show={checkCode}
         delay={3000}
         autohide
+        animation={true}
         className="toast-popup bg-danger text-white">
         <Toast.Header className="bg-danger text-white">
           <i className="bi bi-bug-fill fw-bold"></i>
@@ -200,6 +202,7 @@ const AddUser = () => {
         onClose={() => setShow(false)}
         show={show}
         delay={3000}
+        animation={true}
         autohide
         className="toast-popup bg-success text-white">
         <Toast.Header className="bg-success text-white">

@@ -135,11 +135,11 @@ const Users = () => {
       </Toast>
 
       {/* Add user */}
-      <div className="d-flex justify-content-between my-4">
-        <h3>Users</h3>
+      <div className="d-flex flex-column flex-sm-row justify-content-between gap-2 align-items-sm-center  my-4">
+        <h3 className="d-none d-sm-block">Users</h3>
 
         {/* Filter users */}
-        <div className="d-flex gap-2 w-75">
+        <div className="d-flex gap-2 w-sm-75 w-100">
           <Dropdown
             onSelect={(e) => {
               setTypeFilter(e);
@@ -190,7 +190,7 @@ const Users = () => {
 
         {loginedUser[0].role === "admin" ? (
           <button
-            className="btn btn-primary fw-bold shadow"
+            className="btn btn-primary fw-bold shadow text-nowrap"
             onClick={handleAddUser}>
             + New User
           </button>
@@ -200,83 +200,86 @@ const Users = () => {
       </div>
 
       {/* Show users */}
-      <table className="table table-hover w-100">
-        <thead className="bg-secondary text-light">
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Birthday</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>School Code</th>
-            <th>Student Code</th>
-            <th>{loginedUser[0].role === "admin" ? "Action" : ""}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {usersPerPage.map((e, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>
-                <div className="d-flex align-items-center gap-2">
-                  <img
-                    src={e.avatar}
-                    alt=""
-                    className="rounded-circle avatar"
-                  />
-                  <p className="m-0 text-capitalize">{e.name}</p>
+      <div className="table-responsive-md">
+        <table className="table table-hover w-100">
+          <thead className="bg-secondary text-light">
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Birthday</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>School Code</th>
+              <th>Student Code</th>
+              <th>{loginedUser[0].role === "admin" ? "Action" : ""}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {usersPerPage.map((e, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>
+                  <div className="d-flex align-items-center gap-2">
+                    <img
+                      src={e.avatar}
+                      alt=""
+                      className="rounded-circle avatar"
+                    />
+                    <p className="m-0 text-capitalize">{e.name}</p>
+                  </div>
+                </td>
+                <td className="text-capitalize">{e.birthday}</td>
+                <td className="text-capitalize">{e.email}</td>
+                <td className="text-capitalize">{e.role}</td>
+                <td className="text-capitalize">{e.schoolCode}</td>
+                <td className="text-capitalize">{e.studentCode}</td>
+                <td>
+                  {loginedUser[0].role === "admin" ? (
+                    <div className="d-flex flex-column flex-lg-row gap-2 gap-lg-0 h-100">
+                      <button
+                        className="btn btn-warning me-3"
+                        onClick={() => handleEditUser(e)}>
+                        Edit
+                      </button>
+                      <button
+                        className="btn btn-danger "
+                        onClick={() => {
+                          handleClickOpen(e);
+                        }}>
+                        Delete
+                      </button>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </td>
+              </tr>
+            ))}
+            {/* Pagination - phân trang */}
+            <tr>
+              <td colSpan={10} className="py-3">
+                <div className="pagination d-flex justify-content-end">
+                  <ul className="pagination">
+                    {pageNumbers.map((i) => (
+                      <li
+                        className={`page-item page-link ${
+                          idActive === i ? "active" : ""
+                        }`}
+                        key={i}
+                        onClick={() => {
+                          handleJumpPage(i);
+                        }}>
+                        {i}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </td>
-              <td className="text-capitalize">{e.birthday}</td>
-              <td className="text-capitalize">{e.email}</td>
-              <td className="text-capitalize">{e.role}</td>
-              <td className="text-capitalize">{e.schoolCode}</td>
-              <td className="text-capitalize">{e.studentCode}</td>
-              <td>
-                {loginedUser[0].role === "admin" ? (
-                  <div className="d-flex h-100">
-                    <button
-                      className="btn btn-warning me-3"
-                      onClick={() => handleEditUser(e)}>
-                      Edit
-                    </button>
-                    <button
-                      className="btn btn-danger "
-                      onClick={() => {
-                        handleClickOpen(e);
-                      }}>
-                      Delete
-                    </button>
-                  </div>
-                ) : (
-                  ""
-                )}
-              </td>
             </tr>
-          ))}
-          {/* Pagination - phân trang */}
-          <tr>
-            <td colSpan={10} className="py-3">
-              <div className="pagination d-flex justify-content-end">
-                <ul className="pagination">
-                  {pageNumbers.map((i) => (
-                    <li
-                      className={`page-item page-link ${
-                        idActive === i ? "active" : ""
-                      }`}
-                      key={i}
-                      onClick={() => {
-                        handleJumpPage(i);
-                      }}>
-                      {i}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
+
       {/* Show dialog confirm when click button Delete */}
       <Dialog
         open={confirm}

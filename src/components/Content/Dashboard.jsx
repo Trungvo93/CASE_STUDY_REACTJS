@@ -327,7 +327,7 @@ const Dashboard = () => {
 
             {/* Last 5 books added */}
             <div className="border shadow p-2 rounded  my-3">
-              <div className="d-flex justify-content-between">
+              <div className="d-flex justify-content-between gap-2">
                 <span className="p-2 bg-success d-inline-block rounded fw-bold text-white">
                   Recently Added Books
                 </span>

@@ -121,10 +121,10 @@ const Products = () => {
       </Toast>
 
       {/* Add user */}
-      <div className="d-flex justify-content-between my-4">
-        <h3>Books</h3>
+      <div className="d-flex flex-column flex-sm-row justify-content-between gap-2 align-items-sm-center  my-4">
+        <h3 className="d-none d-sm-block">Books</h3>
         {/* Filter users */}
-        <div className="d-flex gap-2 w-75">
+        <div className="d-flex gap-2 w-sm-75 w-100">
           <Dropdown
             onSelect={(e) => {
               setTypeFilter(e);
@@ -175,7 +175,7 @@ const Products = () => {
 
         {loginedUser[0].role === "admin" ? (
           <button
-            className="btn btn-primary fw-bold shadow"
+            className="btn btn-primary fw-bold shadow text-nowrap"
             onClick={handleAddProduct}>
             + New Book
           </button>
@@ -185,78 +185,80 @@ const Products = () => {
       </div>
 
       {/* Show users */}
-      <table className="table table-hover">
-        <thead className="bg-secondary text-light">
-          <tr>
-            <th>#</th>
-            <th>Title</th>
-            <th>ISBN</th>
-            <th>Author</th>
-            <th>Publisher</th>
-            <th>Category</th>
-            <th>Amount</th>
-            <th>Note</th>
-            <th>Update</th>
-            <th>{loginedUser[0].role === "admin" ? "Action" : ""}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {usersPerPage.map((e, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td className="text-capitalize">{e.title}</td>
-              <td className="text-capitalize">{e.ISBN}</td>
-              <td className="text-capitalize">{e.author}</td>
-              <td className="text-capitalize">{e.publisher}</td>
-              <td className="text-capitalize">{e.category}</td>
-              <td className="text-capitalize">{e.amount}</td>
-              <td className="text-capitalize">{e.note}</td>
-              <td className="text-capitalize">{e.update_on}</td>
-              <td>
-                {loginedUser[0].role === "admin" ? (
-                  <div className="d-flex h-100">
-                    <button
-                      className="btn btn-warning me-3"
-                      onClick={() => handleEditUser(e)}>
-                      Edit
-                    </button>{" "}
-                    <button
-                      className="btn btn-danger "
-                      onClick={() => {
-                        handleClickOpen(e);
-                      }}>
-                      Delete
-                    </button>
-                  </div>
-                ) : (
-                  ""
-                )}
+      <div className="table-responsive-lg ">
+        <table className="table table-hover fix-table m-auto">
+          <thead className="bg-secondary text-light">
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>ISBN</th>
+              <th>Author</th>
+              <th>Publisher</th>
+              <th>Category</th>
+              <th>Amount</th>
+              <th>Note</th>
+              <th>Update</th>
+              <th>{loginedUser[0].role === "admin" ? "Action" : ""}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {usersPerPage.map((e, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td className="text-capitalize">{e.title}</td>
+                <td className="text-capitalize">{e.ISBN}</td>
+                <td className="text-capitalize">{e.author}</td>
+                <td className="text-capitalize">{e.publisher}</td>
+                <td className="text-capitalize">{e.category}</td>
+                <td className="text-capitalize">{e.amount}</td>
+                <td className="text-capitalize">{e.note}</td>
+                <td className="text-capitalize">{e.update_on}</td>
+                <td>
+                  {loginedUser[0].role === "admin" ? (
+                    <div className="d-flex flex-column flex-xl-row gap-2 gap-xl-0 h-100 ">
+                      <button
+                        className="btn btn-warning me-3"
+                        onClick={() => handleEditUser(e)}>
+                        Edit
+                      </button>{" "}
+                      <button
+                        className="btn btn-danger "
+                        onClick={() => {
+                          handleClickOpen(e);
+                        }}>
+                        Delete
+                      </button>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </td>
+              </tr>
+            ))}
+            {/* Pagination - phân trang */}
+            <tr>
+              <td colSpan={10} className="py-3">
+                <div className="pagination d-flex justify-content-end">
+                  <ul className="pagination">
+                    {pageNumbers.map((i) => (
+                      <li
+                        className={`page-item page-link ${
+                          idActive === i ? "active" : ""
+                        }`}
+                        key={i}
+                        onClick={() => {
+                          handleJumpPage(i);
+                        }}>
+                        {i}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </td>
             </tr>
-          ))}
-          {/* Pagination - phân trang */}
-          <tr>
-            <td colSpan={10} className="py-3">
-              <div className="pagination d-flex justify-content-end">
-                <ul className="pagination">
-                  {pageNumbers.map((i) => (
-                    <li
-                      className={`page-item page-link ${
-                        idActive === i ? "active" : ""
-                      }`}
-                      key={i}
-                      onClick={() => {
-                        handleJumpPage(i);
-                      }}>
-                      {i}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
 
       {/* Show dialog confirm when click button Delete */}
       <Dialog
