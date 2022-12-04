@@ -120,7 +120,7 @@ const ProductDetail = () => {
               as="select"
               name="category"
               onChange={(e) => handleChange(e)}
-              className="form-select w-25">
+              className="form-select w-auto">
               <option value="default" disabled hidden>
                 -- Choose --
               </option>
@@ -140,7 +140,7 @@ const ProductDetail = () => {
           <div className="form-floating mb-3">
             <Field
               id="title"
-              className="form-control w-50"
+              className="form-control "
               placeholder="Title"
               name="title"
               value={form.title}
@@ -153,7 +153,7 @@ const ProductDetail = () => {
             className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
           <br />
 
-          <div className="d-flex gap-3">
+          <div className="d-sm-flex gap-3">
             <div>
               <div className="form-floating mb-3">
                 <Field
@@ -190,8 +190,8 @@ const ProductDetail = () => {
             </div>
           </div>
 
-          <div className="d-flex gap-3">
-            <div className="w-25">
+          <div className="d-sm-flex gap-3">
+            <div className="">
               <div className="form-floating mb-3">
                 <Field
                   id="author"
@@ -208,7 +208,7 @@ const ProductDetail = () => {
                 className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
               <br />
             </div>
-            <div className="w-50">
+            <div className="">
               <div className="form-floating mb-3">
                 <Field
                   id="publisher"
@@ -249,7 +249,7 @@ const ProductDetail = () => {
             color="success"
             startIcon={<CheckIcon />}
             onSubmit={handleSubmit}
-            className="px-4 me-4">
+            className="px-4 me-4 mb-3">
             Save
           </Button>
           <Button
@@ -259,7 +259,7 @@ const ProductDetail = () => {
             onClick={() => {
               navigate("/home/products");
             }}
-            className="px-4 me-5">
+            className="px-4 me-5 mb-3 shadow-sm">
             Cancel
           </Button>
 

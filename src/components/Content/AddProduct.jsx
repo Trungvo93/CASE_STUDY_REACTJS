@@ -148,7 +148,7 @@ const AddProduct = () => {
               as="select"
               name="category"
               onChange={(e) => handleChange(e)}
-              className="form-select w-25 mb-3">
+              className="form-select w-auto mb-3">
               <option value="default" hidden>
                 -- Choose --
               </option>
@@ -166,10 +166,10 @@ const AddProduct = () => {
             name="category"
             className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
           <br />
-          <div className="form-floating mb-3">
+          <div className="form-floating mb-3 ">
             <Field
               id="title"
-              className="form-control w-50"
+              className="form-control"
               placeholder="Title"
               name="title"
               value={form.title}
@@ -184,7 +184,7 @@ const AddProduct = () => {
             className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
           <br />
 
-          <div className="d-flex gap-3">
+          <div className="d-sm-flex gap-3">
             <div>
               <div className="form-floating mb-3">
                 <Field
@@ -225,8 +225,8 @@ const AddProduct = () => {
             </div>
           </div>
 
-          <div className="d-flex gap-3">
-            <div className="w-25">
+          <div className="d-sm-flex gap-3">
+            <div className="">
               <div className="form-floating mb-3">
                 <Field
                   id="author"
@@ -245,7 +245,7 @@ const AddProduct = () => {
                 className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
               <br />
             </div>
-            <div className="w-50">
+            <div className="">
               <div className="form-floating mb-3">
                 <Field
                   id="publisher"
@@ -290,7 +290,7 @@ const AddProduct = () => {
             color="success"
             startIcon={<CheckIcon />}
             onSubmit={handleSubmit}
-            className="px-4 me-4">
+            className="px-4 me-4 mb-3">
             Add
           </Button>
           <Button
@@ -300,7 +300,7 @@ const AddProduct = () => {
             onClick={() => {
               navigate("/home/products");
             }}
-            className="px-4 me-5">
+            className="px-4 me-5 mb-3 shadow-sm">
             Cancel
           </Button>
 

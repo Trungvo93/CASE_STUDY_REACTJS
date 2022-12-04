@@ -256,8 +256,8 @@ const AddUser = () => {
             name="username"
             className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
           <br />
-          <div className="d-flex gap-3">
-            <div className="w-25">
+          <div className="d-sm-flex gap-3">
+            <div className="w-100">
               <div className="form-floating mb-3">
                 <Field
                   id="password"
@@ -277,7 +277,7 @@ const AddUser = () => {
                 className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
               <br />
             </div>
-            <div className="w-25">
+            <div className="w-100">
               <div className="form-floating mb-3">
                 <Field
                   id="repassword"
@@ -296,14 +296,14 @@ const AddUser = () => {
               <br />
             </div>
           </div>
-          <div className="d-flex gap-3">
-            <div className="w-25">
+          <div className="d-sm-flex gap-3">
+            <div className="w-100">
               <div className="form-floating mb-3">
                 <Field
                   max={`${date.getFullYear() - 10}-01-01`}
                   type="date"
                   id="birthday"
-                  className="form-control"
+                  className="form-control w-auto"
                   placeholder="Birthday"
                   name="birthday"
                   value={form.birthday}
@@ -318,7 +318,7 @@ const AddUser = () => {
                 className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
               <br />
             </div>
-            <div className="w-50">
+            <div className="w-100">
               <div className="form-floating mb-3">
                 <Field
                   type="email"
@@ -326,7 +326,7 @@ const AddUser = () => {
                   name="email"
                   value={form.email}
                   onChange={(e) => handleChange(e)}
-                  className="form-control"
+                  className="form-control "
                   placeholder="Email"></Field>
                 <label htmlFor="email" className="text-success">
                   Email
@@ -433,7 +433,7 @@ const AddUser = () => {
             color="success"
             startIcon={<CheckIcon />}
             onSubmit={handleSubmit}
-            className="px-4 me-4">
+            className="px-4 me-4 mb-3">
             Add
           </Button>
           <Button
@@ -443,7 +443,7 @@ const AddUser = () => {
             onClick={() => {
               navigate("/home/users");
             }}
-            className="px-4 me-5">
+            className="px-4 me-5 mb-3 shadow">
             Cancel
           </Button>
 

@@ -33,7 +33,9 @@
 .logoLibrary {
   height: 50px;
 }
-
+.logoLibrary:hover {
+  cursor: pointer;
+}
 .avatarLogin {
   --bs-bg-opacity: 0.1;
 }
@@ -49,8 +51,6 @@
   background-color: rgba(253, 252, 252, 0.068);
   backdrop-filter: blur(10px);
   z-index: 999;
-}
-.content {
 }
 
 .search:hover {
@@ -95,4 +95,16 @@
 
 .bg-content {
   background-color: #f4f6f9;
+}
+
+@media only screen and (max-width: 576px) {
+  .logoLibrary {
+    height: 30px;
+  }
+}
+
+@media only screen and (max-width: 380px) {
+  .logoLibrary {
+    display: none;
+  }
 }

@@ -259,7 +259,7 @@ const BorrowReturn = () => {
   };
 
   return (
-    <div className="container mb-5">
+    <div className="container-fluid mb-5">
       {/* Show popup return success */}
       <Toast
         onClose={() => setShowReturn(false)}
@@ -292,7 +292,7 @@ const BorrowReturn = () => {
 
       <div className="row mt-5 gap-4 justify-content-center">
         {/* List book */}
-        <div className="col-5">
+        <div className="col-12 col-md-5 shadow rounded px-3 py-5">
           {/* Choose book */}
           <h4 className="fw-bold mb-4 text-primary">Book Info</h4>
           <Autocomplete
@@ -358,7 +358,7 @@ const BorrowReturn = () => {
         </div>
 
         {/* Choose student */}
-        <div className="col-5">
+        <div className="col-12 col-md-5 shadow rounded px-3 py-5">
           <h4 className="fw-bold mb-4 text-primary">Student Info</h4>
           <Autocomplete
             sx={{ width: "100%" }}
@@ -410,12 +410,12 @@ const BorrowReturn = () => {
               validationSchema={formSchema}
               onSubmit={handleSubmit}>
               <Form>
-                <div className="form-floating mb-3 w-50">
+                <div className="form-floating mb-3 ">
                   <Field
                     min={minDate}
                     type="date"
                     id="dayReturn"
-                    className="form-control"
+                    className="form-control w-auto"
                     placeholder="Day Return"
                     name="dayReturn"
                     value={borrowInfo.dayReturn}
@@ -428,10 +428,10 @@ const BorrowReturn = () => {
                   component="div"
                   name="dayReturn"
                   className="text-capitalize fw-bold text-danger my-3"></ErrorMessage>
-                <div className="form-floating mb-3 w-25">
+                <div className="form-floating mb-3 w-50">
                   <Field
                     id="amount"
-                    className="form-control "
+                    className="form-control w-auto"
                     placeholder="Amount"
                     name="amount"
                     value={borrowInfo.amount}
@@ -448,7 +448,7 @@ const BorrowReturn = () => {
                 <div className="form-floating mb-3 w-50">
                   <Field
                     id="note"
-                    className="form-control "
+                    className="form-control w-auto"
                     placeholder="Note"
                     name="note"
                     value={borrowInfo.note}
@@ -467,11 +467,11 @@ const BorrowReturn = () => {
       </div>
 
       {/* Table */}
-      <div className="">
-        <h3 className="fw-bold text-center text-primary mt-5">
+      <div className="mt-5">
+        <h3 className="fw-bold text-center text-primary pt-5">
           List Borrow and Return
         </h3>
-        <div className="d-flex gap-2 w-75 my-4">
+        <div className="d-sm-flex gap-2  my-4 ">
           {/* Filter */}
           <Dropdown
             onSelect={(e) => {
@@ -526,70 +526,72 @@ const BorrowReturn = () => {
             type="text"
             value={findItem}
             placeholder="Search..."
-            className="form-control input-filter"
+            className="form-control input-filter w-auto m-sm-0 mt-2"
             onChange={handleFilter}
           />
         </div>
-        <table className="table table-hover">
-          <thead className="bg-secondary text-light">
-            <tr>
-              <th>Student Name</th>
-              <th>Title Book</th>
-              <th>Day borrow</th>
-              <th>Day return</th>
-              <th>Status</th>
-              <th>Amount</th>
-              <th>Note</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {bookPerPage.map((e) => (
-              <tr key={e.id} className="align-middle">
-                <td>{e.name}</td>
-                <td>{e.title}</td>
-                <td>{e.dayBorrow.slice(4, 24)}</td>
-                <td>{e.dayReturn}</td>
-                <td>{e.status}</td>
-                <td>{e.amount}</td>
-                <td>{e.note}</td>
-                <td>
-                  {loginedUser[0].role === ("admin" || "library") &&
-                  e.dayReturned === "" ? (
-                    <button
-                      className="btn btn-warning me-3"
-                      onClick={() => handleOpenReturn(e)}>
-                      Return
-                    </button>
-                  ) : (
-                    ""
-                  )}
+        <div className="table-responsive-md">
+          <table className="table table-hover">
+            <thead className="bg-secondary text-light">
+              <tr>
+                <th>Student Name</th>
+                <th>Title Book</th>
+                <th>Day borrow</th>
+                <th>Day return</th>
+                <th>Status</th>
+                <th>Amount</th>
+                <th>Note</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {bookPerPage.map((e) => (
+                <tr key={e.id} className="align-middle">
+                  <td>{e.name}</td>
+                  <td>{e.title}</td>
+                  <td>{e.dayBorrow.slice(4, 24)}</td>
+                  <td>{e.dayReturn}</td>
+                  <td>{e.status}</td>
+                  <td>{e.amount}</td>
+                  <td>{e.note}</td>
+                  <td>
+                    {loginedUser[0].role === ("admin" || "library") &&
+                    e.dayReturned === "" ? (
+                      <button
+                        className="btn btn-warning me-3"
+                        onClick={() => handleOpenReturn(e)}>
+                        Return
+                      </button>
+                    ) : (
+                      ""
+                    )}
+                  </td>
+                </tr>
+              ))}
+              {/* Pagination - phân trang */}
+              <tr>
+                <td colSpan={8} className="py-3">
+                  <div className="pagination d-flex justify-content-end">
+                    <ul className="pagination">
+                      {pageNumbers.map((i) => (
+                        <li
+                          className={`page-item page-link ${
+                            idActive === i ? "active" : ""
+                          }`}
+                          key={i}
+                          onClick={() => {
+                            handleJumpPage(i);
+                          }}>
+                          {i}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </td>
               </tr>
-            ))}
-            {/* Pagination - phân trang */}
-            <tr>
-              <td colSpan={8} className="py-3">
-                <div className="pagination d-flex justify-content-end">
-                  <ul className="pagination">
-                    {pageNumbers.map((i) => (
-                      <li
-                        className={`page-item page-link ${
-                          idActive === i ? "active" : ""
-                        }`}
-                        key={i}
-                        onClick={() => {
-                          handleJumpPage(i);
-                        }}>
-                        {i}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Show dialog confirm when click button Submit */}

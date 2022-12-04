@@ -89,12 +89,9 @@ const Dashboard = () => {
   ) {
     return (
       <div className="container ">
+        {/* Statistic */}
         <div className="row gap-3 gap-md-0">
-          <div
-            className="col-12 col-md-6 col-lg-3 p-md-3 "
-            onClick={() => {
-              navigate("/home/users");
-            }}>
+          <div className="col-12 col-md-6 col-lg-3 p-md-3 ">
             <div className="bg-info rounded p-0">
               <div className="d-flex gap-5 justify-content-between align-items-center  p-3">
                 <div className=" text-white">
@@ -105,17 +102,17 @@ const Dashboard = () => {
                   <i className="bi bi-people  "></i>
                 </div>
               </div>
-              <div className="text-center text-white  p-1 get-info">
+              <div
+                className="text-center text-white  p-1 get-info"
+                onClick={() => {
+                  navigate("/home/users");
+                }}>
                 <span>More info</span>
                 <i className="bi bi-arrow-right-circle ps-2"></i>
               </div>
             </div>
           </div>
-          <div
-            className="col-12 col-md-6 col-lg-3 p-md-3 "
-            onClick={() => {
-              navigate("/home/products");
-            }}>
+          <div className="col-12 col-md-6 col-lg-3 p-md-3 ">
             <div className="bg-success rounded p-0">
               <div className="d-flex gap-5 justify-content-between align-items-center  p-3">
                 <div className=" text-white">
@@ -126,17 +123,17 @@ const Dashboard = () => {
                   <i className="bi bi-journals"></i>
                 </div>
               </div>
-              <div className="text-center text-white  p-1 get-info">
+              <div
+                className="text-center text-white  p-1 get-info"
+                onClick={() => {
+                  navigate("/home/products");
+                }}>
                 <span>More info</span>
                 <i className="bi bi-arrow-right-circle ps-2"></i>
               </div>
             </div>
           </div>
-          <div
-            className="col-12 col-md-6 col-lg-3 p-md-3"
-            onClick={() => {
-              navigate("/home/borrowreturn");
-            }}>
+          <div className="col-12 col-md-6 col-lg-3 p-md-3">
             <div className="bg-warning rounded p-0">
               <div className="d-flex gap-5 justify-content-between align-items-center  p-3">
                 <div className=" text-white">
@@ -147,17 +144,17 @@ const Dashboard = () => {
                   <i className="bi bi-clipboard-minus"></i>
                 </div>
               </div>
-              <div className="text-center text-white  p-1 get-info">
+              <div
+                className="text-center text-white  p-1 get-info"
+                onClick={() => {
+                  navigate("/home/borrowreturn");
+                }}>
                 <span>More info</span>
                 <i className="bi bi-arrow-right-circle ps-2"></i>
               </div>
             </div>
           </div>
-          <div
-            className="col-12 col-md-6 col-lg-3  p-md-3"
-            onClick={() => {
-              navigate("/home/borrowreturn");
-            }}>
+          <div className="col-12 col-md-6 col-lg-3  p-md-3">
             <div className="bg-danger rounded p-0">
               <div className="d-flex gap-5 justify-content-between align-items-center  p-3">
                 <div className=" text-white">
@@ -168,14 +165,17 @@ const Dashboard = () => {
                   <i className="bi bi-clipboard-check"></i>
                 </div>
               </div>
-              <div className="text-center text-white  p-1 get-info">
+              <div
+                className="text-center text-white  p-1 get-info"
+                onClick={() => {
+                  navigate("/home/borrowreturn");
+                }}>
                 <span>More info</span>
                 <i className="bi bi-arrow-right-circle ps-2"></i>
               </div>
             </div>
           </div>
         </div>
-
         <div className="row mt-5 ">
           <div className="col-12 col-lg-4 ">
             {/* Last member */}

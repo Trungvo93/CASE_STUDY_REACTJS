@@ -211,8 +211,8 @@ const UserDetail = () => {
             </label>
           </div>
           <br />
-          <div className="d-flex gap-3">
-            <div className="w-25">
+          <div className="d-sm-flex gap-3">
+            <div className="w-100">
               <div className="form-floating mb-3">
                 <Field
                   id="password"
@@ -232,7 +232,7 @@ const UserDetail = () => {
                 className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
               <br />
             </div>
-            <div className="w-25">
+            <div className="w-100">
               <div className="form-floating mb-3">
                 <Field
                   id="repassword"
@@ -251,14 +251,14 @@ const UserDetail = () => {
               <br />
             </div>
           </div>
-          <div className="d-flex gap-3">
-            <div className="w-25">
+          <div className="d-sm-flex gap-3">
+            <div className="w-100">
               <div className="form-floating mb-3">
                 <Field
                   max={`${date.getFullYear() - 10}-01-01`}
                   type="date"
                   id="birthday"
-                  className="form-control"
+                  className="form-control w-auto"
                   placeholder="Birthday"
                   name="birthday"
                   value={form.birthday}
@@ -273,7 +273,7 @@ const UserDetail = () => {
                 className="text-capitalize fw-bold text-danger mt-3"></ErrorMessage>
               <br />
             </div>
-            <div className="w-50">
+            <div className="w-100">
               <div className="form-floating mb-3">
                 <Field
                   type="email"
@@ -378,7 +378,7 @@ const UserDetail = () => {
             color="success"
             startIcon={<CheckIcon />}
             onSubmit={handleSubmit}
-            className="px-4 me-4">
+            className="px-4 me-4 mb-3">
             Save
           </Button>
           <Button
@@ -388,7 +388,7 @@ const UserDetail = () => {
             onClick={() => {
               navigate("/home/users");
             }}
-            className="px-4 me-5">
+            className="px-4 me-5 mb-3 shadow">
             Cancel
           </Button>
 

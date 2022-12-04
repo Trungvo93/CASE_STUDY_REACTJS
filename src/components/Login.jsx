@@ -47,7 +47,7 @@ const Login = () => {
     }
   };
   return (
-    <div className="container-fluid row login">
+    <div className="container-fluid row login m-0">
       <div className="d-none d-lg-block col-lg-3 leftShadow ">
         <div className="loginLeft">
           <h1>Hi, Welcome Back</h1>

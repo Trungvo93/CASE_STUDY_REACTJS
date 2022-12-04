@@ -73,23 +73,26 @@ const Layout = () => {
   }, []);
   if (loginedUser.length > 0) {
     return (
-      <div className="container-fluid">
+      <div className="container-fluid m-0">
         <div className="row">
-          <div className="col-0 col-lg-1 col-xl-2 p-3 d-none d-lg-flex flex-column gap-3 border-dotted leftMenu">
+          <div className="col-0 col-lg-1 col-xl-2 p-3  d-none d-lg-flex flex-column gap-3 border-dotted leftMenu">
             <TopInfo></TopInfo>
             <hr className=" d-none d-xl-block" />
             <Menu></Menu>
           </div>
           <div className="col-12 col-lg-11 col-xl-10 p-0 pb-2 bg-content ">
-            <div className="sticky-top stickyTop d-flex justify-content-between align-items-center px-5  shadow-sm">
-              <div>
+            <div className="sticky-top stickyTop d-flex justify-content-between align-items-center px-2 px-sm-5  shadow-sm">
+              <div className="">
                 <img
                   src={`${process.env.PUBLIC_URL}/images/logo_library.png`}
                   alt=""
-                  className="logoLibrary"
+                  className="logoLibrary "
+                  onClick={() => {
+                    navigate("/home/dashboard");
+                  }}
                 />
               </div>
-              <div className="d-flex gap-md-5 gap-2 d-lg-none">
+              <div className="d-flex gap-md-5 gap-sm-2 gap-1 d-lg-none">
                 <NavLink
                   to="dashboard"
                   className="d-flex gap-3 align-items-center text-decoration-none p-3 rounded-2 "
@@ -148,7 +151,7 @@ const Layout = () => {
               </div>
             </div>
 
-            <div className="container mt-5 ">
+            <div className="container-lg mt-5 ">
               <Outlet></Outlet>
             </div>
           </div>
