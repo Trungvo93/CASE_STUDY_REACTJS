@@ -555,7 +555,8 @@ const BorrowReturn = () => {
                   <td>{e.amount}</td>
                   <td>{e.note}</td>
                   <td>
-                    {loginedUser[0].role === ("admin" || "library") &&
+                    {(loginedUser[0].role === "admin" ||
+                      loginedUser[0].role === "library") &&
                     e.dayReturned === "" ? (
                       <button
                         className="btn btn-warning me-3"

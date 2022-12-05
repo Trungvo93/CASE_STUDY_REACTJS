@@ -126,7 +126,6 @@ const AddUser = () => {
                 (e) => e.username === form.username
               );
               if (found === -1) {
-                setShow(true);
                 setTimeout(() => {
                   axios
                     .post(
@@ -134,6 +133,7 @@ const AddUser = () => {
                       form
                     )
                     .then((res1) => {
+                      setShow(true);
                       axios
                         .get(
                           `https://637edb84cfdbfd9a63b87c1c.mockapi.io/users`
